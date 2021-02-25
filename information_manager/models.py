@@ -74,3 +74,37 @@ class Player(models.Model):
 
     def __str__(self):
         return f'{self.firstname} {self.lastname}'
+
+
+class TypeOfEvent(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    type_of_event = models.CharField(max_length=60, verbose_name='Тип мероприятия')
+
+    class Meta:
+        verbose_name = 'Тип мероприятие'
+        verbose_name_plural = 'Типы мероприятий'
+
+    def __str__(self):
+        return f'{self.type_of_event}'
+
+
+class Event(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    title = models.CharField(max_length=60, verbose_name='Название')
+    date_of_the_event = models.DateTimeField(blank=True, verbose_name='Дата мероприятия')
+    type_of_event = models.ForeignKey(TypeOfEvent, verbose_name='Тип мероприятия', blank=True, null=True,
+                                      on_delete=models.SET_NULL)
+    description = models.CharField(max_length=200, verbose_name='Описание')
+    photo = models.FileField(verbose_name='Фото', upload_to='events/%Y/%m/%d/', blank=True)
+    teams = models.ManyToManyField(Team, blank=True, verbose_name='Команды')
+
+    class Meta:
+        verbose_name = 'Мероприятие'
+        verbose_name_plural = 'Мероприятия'
+
+    def __str__(self):
+        return f'{self.title}'

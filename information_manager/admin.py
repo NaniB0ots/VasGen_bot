@@ -29,3 +29,15 @@ class PlayerAdmin(admin.ModelAdmin):
     search_fields = ('firstname', 'lastname', 'team', 'playing_position', 'patronymic', 'age')
     list_filter = ('is_captain', 'team')
     ordering = ['-update_date']
+
+
+@admin.register(models.TypeOfEvent)
+class TypeOfEventAdmin(admin.ModelAdmin):
+    ordering = ['-update_date']
+
+
+@admin.register(models.Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date_of_the_event', 'type_of_event')
+    search_fields = ('title', 'description', 'date_of_the_event')
+    ordering = ['-update_date']
