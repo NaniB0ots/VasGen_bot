@@ -30,3 +30,46 @@ class News(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+
+class Team(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=25, verbose_name='Название')
+    educational_institution = models.CharField(max_length=40, verbose_name='Учебное заведение')
+
+    wins = models.IntegerField(default=0, verbose_name='Победы')
+    losses = models.IntegerField(default=0, verbose_name='Поражения')
+    goals_scored = models.IntegerField(default=0, verbose_name='Забитые голы')
+    games_in_the_season = models.IntegerField(default=0, verbose_name='Игры в сезоне')
+
+    class Meta:
+        verbose_name = 'Команда'
+        verbose_name_plural = 'Команды'
+
+    def __str__(self):
+        return f'{self.title}'
+
+
+class Player(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    firstname = models.CharField(max_length=25, verbose_name='Имя')
+    lastname = models.CharField(max_length=25, verbose_name='Фамилия')
+    patronymic = models.CharField(max_length=25, verbose_name='Отчество', blank=True)
+    age = models.IntegerField(verbose_name='Возраст', blank=True)
+    team = models.ForeignKey(Team, verbose_name='Команда', blank=True, on_delete=models.PROTECT)
+    playing_position = models.CharField(max_length=25, verbose_name='Позиция', blank=True)
+    is_captain = models.BooleanField(default=False, verbose_name='Капитан')
+
+    wins = models.IntegerField(default=0, verbose_name='Победы')
+    losses = models.IntegerField(default=0, verbose_name='Поражения')
+    goals_scored = models.IntegerField(default=0, verbose_name='Забитые голы')
+    games_in_the_season = models.IntegerField(default=0, verbose_name='Игры в сезоне')
+
+    class Meta:
+        verbose_name = 'Игрок'
+        verbose_name_plural = 'Игроки'
+
+    def __str__(self):
+        return f'{self.firstname} {self.lastname}'
