@@ -54,11 +54,12 @@ class Team(models.Model):
 class Player(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
-    firstname = models.CharField(max_length=25, verbose_name='Имя')
     lastname = models.CharField(max_length=25, verbose_name='Фамилия')
+    firstname = models.CharField(max_length=25, verbose_name='Имя')
     patronymic = models.CharField(max_length=25, verbose_name='Отчество', blank=True)
     age = models.IntegerField(verbose_name='Возраст', blank=True)
-    team = models.ForeignKey(Team, verbose_name='Команда', blank=True, on_delete=models.PROTECT)
+    photo = models.FileField(verbose_name='Фото', upload_to='players/', blank=True)
+    team = models.ForeignKey(Team, verbose_name='Команда', blank=True, null=True, on_delete=models.SET_NULL)
     playing_position = models.CharField(max_length=25, verbose_name='Позиция', blank=True)
     is_captain = models.BooleanField(default=False, verbose_name='Капитан')
 
