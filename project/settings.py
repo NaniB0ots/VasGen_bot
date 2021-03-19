@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 TG_TOKEN = os.environ.get('TG_TOKEN')
+TG_TOKEN_ADMIN = os.environ.get('TG_TOKEN_ADMIN')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') in ['True', 'on']
@@ -28,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_profile',
     'information_manager',
-    'tg_bot'
+    'tg_bot',
+    'tg_admin_bot'
 ]
 
 MIDDLEWARE = [
@@ -109,4 +111,3 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
