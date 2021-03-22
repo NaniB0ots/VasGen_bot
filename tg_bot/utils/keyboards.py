@@ -1,4 +1,5 @@
 from telebot import types
+import json
 
 MAX_CALLBACK_RANGE = 41
 
@@ -27,4 +28,24 @@ def get_matches_keyboard():
     markup.add(btn1, btn2)
     markup.add(btn3)
     markup.add(btn4)
+    return markup
+
+
+def get_inline_match_keyboard(event_id: int,
+                              message_id: int,
+                              is_notification_active=False,
+                              is_text_translation_active=False):
+    markup = types.InlineKeyboardMarkup()
+    if not is_notification_active:
+        notification_text = 'Подписаться на уведомление'
+    else:
+        notification_text = 'Отписаться от уведомления'
+    markup.add(types.InlineKeyboardButton(text=notification_text, callback_data='qwe'), )
+
+    if not is_text_translation_active:
+        translation_text = 'Подписаться на текстовую трансляцию'
+    else:
+        translation_text = 'Отписаться от текстовой трансляции'
+
+    markup.add(types.InlineKeyboardButton(text=translation_text, callback_data='123'))
     return markup

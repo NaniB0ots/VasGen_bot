@@ -1,4 +1,6 @@
 import telebot
+import datetime
+from information_manager import models as information_manager_models
 
 
 class Bot(telebot.TeleBot):
@@ -33,8 +35,17 @@ class Match:
     def disable_text_translation(self, chat_id):
         pass
 
-    def get_matches_this_month(self) -> str:
-        pass
+    @staticmethod
+    def get_matches_this_month() -> (str, list):
+        month_list = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
+                      'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+
+        month_index = datetime.datetime.now().month
+        month = month_list[month_index - 1]
+
+        matches = information_manager_models.Event.objects.filter(type_of_event='match',
+                                                                  date_of_the_event__month=month_index)
+        return month, matches
 
 
 class User:
