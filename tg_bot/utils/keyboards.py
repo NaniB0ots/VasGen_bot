@@ -32,20 +32,32 @@ def get_matches_keyboard():
 
 
 def get_inline_match_keyboard(event_id: int,
-                              message_id: int,
                               is_notification_active=False,
                               is_text_translation_active=False):
     markup = types.InlineKeyboardMarkup()
     if not is_notification_active:
         notification_text = 'Подписаться на уведомление'
+        notification_callback_data = json.dumps({
+            'enable_match_notif':
+                {
+                    'event_id': event_id,
+                }
+        })
     else:
-        notification_text = 'Отписаться от уведомления'
-    markup.add(types.InlineKeyboardButton(text=notification_text, callback_data='qwe'), )
+        notification_text = 'Отписаться от уведомления ✅'
+        notification_callback_data = json.dumps({
+            'disable_match_notif':
+                {
+                    'event_id': event_id,
+                }
+        })
+
+    markup.add(types.InlineKeyboardButton(text=notification_text, callback_data=notification_callback_data))
 
     if not is_text_translation_active:
-        translation_text = 'Подписаться на текстовую трансляцию'
+        translation_text = 'Подписаться на текстовую трансляцию '
     else:
-        translation_text = 'Отписаться от текстовой трансляции'
+        translation_text = 'Отписаться от текстовой трансляции ✅'
 
     markup.add(types.InlineKeyboardButton(text=translation_text, callback_data='123'))
     return markup

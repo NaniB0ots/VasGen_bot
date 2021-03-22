@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 
+from project.settings import DEBUG
 from tg_bot.tg_bot import bot
 
 
@@ -8,4 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print('Бот запущен...')
-        bot.infinity_polling()
+        if DEBUG:
+            bot.polling()
+        else:
+            bot.infinity_polling()
