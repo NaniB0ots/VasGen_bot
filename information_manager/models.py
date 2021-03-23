@@ -1,5 +1,6 @@
 from django.db import models
 
+from tg_bot.models import TgUser
 from user_profile.models import Profile
 
 
@@ -87,6 +88,10 @@ class Event(models.Model):
     description = models.CharField(max_length=200, verbose_name='Описание')
     photo = models.FileField(verbose_name='Фото', upload_to='events/%Y/%m/%d/', blank=True)
     teams = models.ManyToManyField(Team, blank=True, verbose_name='Команды')
+
+    users_for_notifications = models.ManyToManyField(TgUser, verbose_name='Пользователи для уведомлений')
+    users_for_text_translation = models.ManyToManyField(TgUser, related_name='users_for_text_translation',
+                                                        verbose_name='Пользователи для текстовой трансляции')
 
     class Meta:
         verbose_name = 'Мероприятие'
