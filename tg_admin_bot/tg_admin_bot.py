@@ -32,3 +32,21 @@ def authorization(message):
     else:
         msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
         bot.register_next_step_handler(msg, authorization)
+
+
+@bot.message_handler(regexp='^Начать трансляцию')
+def text_translation(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+    matches_queryset = core.TextTranslation.get_matches_of_the_day()
+    if matches_queryset:
+        bot.send_message(chat_id=chat_id,
+                         text=f'Трансляцию какого матча Вы собираетесь вести?',
+                         reply_markup=keyboards.get_inline_text_translation_matches_keyboard(matches_queryset))
+    else:
+        bot.send_message(chat_id=chat_id,
+                         text=f'Сегодня матчей нет', reply_markup=keyboards.get_main_menu_keyboard())

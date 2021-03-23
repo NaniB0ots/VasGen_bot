@@ -1,6 +1,8 @@
 import telebot
+import datetime
 
 from tg_admin_bot import models
+from information_manager import models as information_manager_models
 
 
 class AdminBot(telebot.TeleBot):
@@ -57,3 +59,13 @@ class User:
         user = models.TgAdminUser.objects.create(chat_id=chat_id, token=token_query, username=username)
 
         return user
+
+
+class TextTranslation:
+    @staticmethod
+    def get_matches_of_the_day():
+        day = datetime.datetime.now().day
+
+        matches = information_manager_models.Event.objects.filter(type_of_event='match',
+                                                                  date_of_the_event__day=day)
+        return matches

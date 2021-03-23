@@ -14,3 +14,15 @@ def get_main_menu_keyboard():
     markup.add(btn2)
     markup.add(btn3)
     return markup
+
+
+def get_inline_text_translation_matches_keyboard(matches_queryset):
+    markup = types.InlineKeyboardMarkup()
+
+    for match in matches_queryset:
+        callback_data = json.dumps({
+            'text_translation_match': match.id
+        })
+        markup.add(types.InlineKeyboardButton(text=match.title, callback_data=callback_data))
+
+    return markup
