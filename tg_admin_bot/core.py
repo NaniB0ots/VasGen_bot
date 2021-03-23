@@ -69,3 +69,12 @@ class TextTranslation:
         matches = information_manager_models.Event.objects.filter(type_of_event='match',
                                                                   date_of_the_event__day=day)
         return matches
+
+    @staticmethod
+    def get_match_query(match_id):
+        try:
+            match_query = information_manager_models.Event.objects.get(id=match_id)
+            return match_query
+        except information_manager_models.Event.DoesNotExist:
+            return None
+

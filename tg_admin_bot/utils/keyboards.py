@@ -20,9 +20,16 @@ def get_inline_text_translation_matches_keyboard(matches_queryset):
     markup = types.InlineKeyboardMarkup()
 
     for match in matches_queryset:
-        callback_data = json.dumps({
-            'text_translation_match': match.id
-        })
+        callback_data = json.dumps({'match': match.id})
         markup.add(types.InlineKeyboardButton(text=match.title, callback_data=callback_data))
+
+    return markup
+
+
+def get_stop_text_translation_keyboard():
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    btn1 = types.KeyboardButton('Стоп')
+
+    markup.add(btn1)
 
     return markup
