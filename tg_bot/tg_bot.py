@@ -15,6 +15,7 @@ bot = Bot(TG_TOKEN)
 @bot.message_handler(commands=['start'])
 def start_message(message):
     chat_id = message.chat.id
+    user = core.User(chat_id)
     bot.send_message(chat_id=chat_id, text=bot.get_start_message(), reply_markup=keyboards.get_main_menu_keyboard())
 
 

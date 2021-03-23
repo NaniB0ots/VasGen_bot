@@ -1,6 +1,7 @@
 import telebot
 import datetime
 from information_manager import models as information_manager_models
+from tg_bot import models
 
 
 class Bot(telebot.TeleBot):
@@ -51,6 +52,13 @@ class Match:
 class User:
     def __init__(self, chat_id):
         self.chat_id = chat_id
+        self._registration()
+
+    def _registration(self):
+        try:
+            models.TgUser.objects.get(chat_id=self.chat_id)
+        except models.TgUser.DoesNotExist:
+            models.TgUser.objects.create(chat_id=self.chat_id)
 
     def enable_match_notifications(self):
         pass
