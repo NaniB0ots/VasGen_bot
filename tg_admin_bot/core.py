@@ -3,6 +3,7 @@ import datetime
 
 from tg_admin_bot import models
 from information_manager import models as information_manager_models
+from tg_bot.tg_bot import bot as tg_user_bot
 
 
 class AdminBot(telebot.TeleBot):
@@ -71,6 +72,11 @@ class User:
 
 
 class TextTranslation:
+    def __init__(self, match_id):
+        self.match_id = match_id
+        self.match = information_manager_models.Event.objects.filter(type_of_event='match')
+        self.object = self._get_match_query(match_id)
+
     @staticmethod
     def get_matches_of_the_day():
         day = datetime.datetime.now().day
@@ -80,9 +86,12 @@ class TextTranslation:
         return matches
 
     @staticmethod
-    def get_match_query(match_id):
+    def _get_match_query(match_id):
         try:
             match_query = information_manager_models.Event.objects.get(id=match_id)
             return match_query
         except information_manager_models.Event.DoesNotExist:
             return None
+
+    def send_text_translation_message(self, text):
+        tg_user_bot.send_message_text_translation(match_id=self.match_id, text=text)

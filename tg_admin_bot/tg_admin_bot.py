@@ -85,20 +85,40 @@ def text_translation(message):
 def text_translation_start(message):
     chat_id = message.message.chat.id
     message_id = message.message.message_id
-    data = json.loads(message.data)['match']
+    match_id = json.loads(message.data)['match']
 
-    match = core.TextTranslation.get_match_query(match_id=data)
+    match = core.TextTranslation(match_id=match_id).object
     if match:
         bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=match.title)
-        bot.send_message(chat_id=chat_id,
-                         text='Окей! Запускаем вещание...\n'
-                              'Все, Вы в эфире.\n\n'
-                              'Для того, чтобы прекратить трансляцию, необходимо нажать на кнопку “Стоп”',
-                         reply_markup=keyboards.get_stop_text_translation_keyboard())
+        msg = bot.send_message(chat_id=chat_id,
+                               text='Окей! Запускаем вещание...\n'
+                                    'Все, Вы в эфире.\n\n'
+                                    'Для того, чтобы прекратить трансляцию, необходимо нажать на кнопку “Стоп”',
+                               reply_markup=keyboards.get_stop_text_translation_keyboard())
+        bot.register_next_step_handler(msg, translation, match_id=match_id)
     else:
         bot.send_message(chat_id=chat_id,
                          text='Что-то пошло не так... Попробуйте ещё раз',
                          reply_markup=keyboards.get_main_menu_keyboard())
+
+
+def translation(message, match_id):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    text = message.text
+    if text == 'Стоп':
+        text_translation_stop(message)
+        return
+
+    match_translation = core.TextTranslation(match_id)
+    match_translation.send_text_translation_message(text=text)
+    msg = bot.send_message(chat_id=chat_id, text='Собщение отправлено')
+    bot.register_next_step_handler(msg, translation, match_id=match_id)
 
 
 @bot.message_handler(regexp='^Стоп$')
