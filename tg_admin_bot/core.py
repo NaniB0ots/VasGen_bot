@@ -37,7 +37,12 @@ class User:
         self.chat_id = chat_id
 
     def is_authenticated(self):
-        return self.chat_id in ['1234']
+
+        try:
+            models.TgAdminUser.objects.get(chat_id=self.chat_id)
+            return True
+        except models.TgAdminUser.DoesNotExist:
+            return False
 
     @staticmethod
     def authorization(chat_id, token, username):
