@@ -38,6 +38,31 @@ def authorization(message):
         bot.register_next_step_handler(msg, authorization)
 
 
+@bot.message_handler(regexp='^Основное меню$')
+def main_menu(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    bot.send_message(chat_id=chat_id, text='Основное меню',
+                     reply_markup=keyboards.get_main_menu_keyboard())
+
+
+@bot.message_handler(regexp='^Авторы')
+def authors(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    bot.send_message(chat_id=chat_id, text=bot.get_authors())
+
+
 @bot.message_handler(regexp='^Начать трансляцию$')
 def text_translation(message):
     chat_id = message.chat.id
@@ -90,8 +115,21 @@ def text_translation_stop(message):
                      reply_markup=keyboards.get_main_menu_keyboard())
 
 
+@bot.message_handler(regexp='^Новости$')
+def write_news(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    bot.send_message(chat_id=chat_id, text='Новости',
+                     reply_markup=keyboards.get_news_keyboard())
+
+
 @bot.message_handler(regexp='^Опубликовать новость$')
-def news(message):
+def write_news(message):
     chat_id = message.chat.id
     user = core.User(chat_id)
     if not user.is_authenticated():
@@ -100,5 +138,23 @@ def news(message):
         return
 
     bot.send_message(chat_id=chat_id, text='Для того, чтобы опубликовать новость, '
-                                           'напишите текст новости с клавиатуры и нажмите “Опубликовать”.\n\n'
-                                           'Ждем вестей!')
+                                           'напишите текст новости в чат.\n\n'
+                                           'Ждем вестей!',
+                     reply_markup=keyboards.get_cancel_write_news_keyboard())
+
+    bot.send_message(chat_id=chat_id, text='ВАЖНО!\n'
+                                           'Пожалуйста, '
+                                           'Перед отправкой проверьте текст новости на наличие ошибок и опечаток.')
+
+
+@bot.message_handler(regexp='^Отмена$')
+def write_news(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    bot.send_message(chat_id=chat_id, text='Отмена',
+                     reply_markup=keyboards.get_news_keyboard())

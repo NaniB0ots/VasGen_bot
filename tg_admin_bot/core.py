@@ -33,6 +33,15 @@ class AdminBot(telebot.TeleBot):
         message = '<Инструкция по пользованию ботом...>'
         return message
 
+    @staticmethod
+    def get_authors() -> str:
+        message = 'Авторы проекта ВасГен бот:\n' \
+                  'Сидоренко Анжелика - @alikastory\n' \
+                  'Лесков Алексей - @bolanebyla\n' \
+                  'Ашимов Султан - @ace_sultan\n'
+
+        return message
+
 
 class User:
     def __init__(self, chat_id):
@@ -77,4 +86,3 @@ class TextTranslation:
             return match_query
         except information_manager_models.Event.DoesNotExist:
             return None
-
