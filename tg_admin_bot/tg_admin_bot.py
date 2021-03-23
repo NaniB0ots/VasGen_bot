@@ -38,7 +38,7 @@ def authorization(message):
         bot.register_next_step_handler(msg, authorization)
 
 
-@bot.message_handler(regexp='^Начать трансляцию')
+@bot.message_handler(regexp='^Начать трансляцию$')
 def text_translation(message):
     chat_id = message.chat.id
     user = core.User(chat_id)
@@ -76,7 +76,7 @@ def text_translation_start(message):
                          reply_markup=keyboards.get_main_menu_keyboard())
 
 
-@bot.message_handler(regexp='^Стоп')
+@bot.message_handler(regexp='^Стоп$')
 def text_translation_stop(message):
     chat_id = message.chat.id
     user = core.User(chat_id)
@@ -88,3 +88,17 @@ def text_translation_stop(message):
     bot.send_message(chat_id=chat_id,
                      text='Трансляция остановлена',
                      reply_markup=keyboards.get_main_menu_keyboard())
+
+
+@bot.message_handler(regexp='^Опубликовать новость$')
+def news(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    bot.send_message(chat_id=chat_id, text='Для того, чтобы опубликовать новость, '
+                                           'напишите текст новости с клавиатуры и нажмите “Опубликовать”.\n\n'
+                                           'Ждем вестей!')
