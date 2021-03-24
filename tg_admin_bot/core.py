@@ -94,4 +94,9 @@ class TextTranslation:
             return None
 
     def send_text_translation_message(self, text):
-        tg_user_bot.send_message_text_translation(match_id=self.match_id, text=text)
+        """
+        Отправка сообщения текстовой трансляции
+        :param text:
+        :return:
+        """
+        tg_user_bot.send_message_text_translation(match=self.object, text=text)

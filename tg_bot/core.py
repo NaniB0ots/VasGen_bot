@@ -25,14 +25,19 @@ class Bot(telebot.TeleBot):
     def send_message_to_all_users(self, text):
         pass
 
-    def send_message_text_translation(self, match_id: int, text):
-        try:
-            users = information_manager_models.Event.objects.get(id=match_id).users_for_text_translation
-        except information_manager_models.Event.DoesNotExist:
-            return
-        print(users)
-        # for user in users:
-        #     self.send_message(chat_id=user.chat_id)
+    def send_message_text_translation(self, match: information_manager_models.Event, text):
+        """
+        Отправка сообщения текстовой трансляции
+        :param match:
+        :param text:
+        :return:
+        """
+        users = match.users_for_text_translation.all()
+        title = 'Текстовая трансляция\n' \
+                f'{match.title}\n' \
+                f'----------------------------------\n\n'
+        for user in users:
+            self.send_message(chat_id=user.chat_id, text=title + text)
 
 
 class Match:
