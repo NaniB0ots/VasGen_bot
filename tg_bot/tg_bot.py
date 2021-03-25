@@ -102,7 +102,13 @@ def enable_text_translation(message):
     """
     chat_id = message.message.chat.id
     message_id = message.message.message_id
+
+    user = core.User(chat_id=chat_id)
+
     data = json.loads(message.data)['enable_translation']
+
+    match = core.Match(match_id=data['id'])
+    match.enable_text_translation(user=user)
     bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,
                                   reply_markup=keyboards.get_inline_match_keyboard(event_id=data['id'],
                                                                                    is_text_translation_active=True,

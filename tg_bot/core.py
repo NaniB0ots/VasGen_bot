@@ -40,32 +40,6 @@ class Bot(telebot.TeleBot):
             self.send_message(chat_id=user.chat_id, text=title + text)
 
 
-class Match:
-    def enable_match_notifications(self, chat_id):
-        pass
-
-    def disable_match_notifications(self, chat_id):
-        pass
-
-    def enable_text_translation(self, chat_id):
-        pass
-
-    def disable_text_translation(self, chat_id):
-        pass
-
-    @staticmethod
-    def get_matches_this_month() -> (str, list):
-        month_list = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
-                      'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-
-        month_index = datetime.datetime.now().month
-        month = month_list[month_index - 1]
-
-        matches = information_manager_models.Event.objects.filter(type_of_event='match',
-                                                                  date_of_the_event__month=month_index)
-        return month, matches
-
-
 class User:
     def __init__(self, chat_id):
         self.chat_id = chat_id
@@ -96,3 +70,39 @@ class BettingOnGames:
 
     def get_matches_list(self) -> list:
         pass
+
+
+class Match:
+    def __init__(self, match_id):
+        self.match_id = match_id
+        self.object = self.get_queryset()
+
+    def enable_match_notifications(self, chat_id):
+        pass
+
+    def disable_match_notifications(self, chat_id):
+        pass
+
+    def enable_text_translation(self, user: User):
+        self.object.users_for_text_translation.add(user.object.id)
+
+    def disable_text_translation(self, chat_id):
+        pass
+
+    @staticmethod
+    def get_matches_this_month() -> (str, list):
+        month_list = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
+                      'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+
+        month_index = datetime.datetime.now().month
+        month = month_list[month_index - 1]
+
+        matches = information_manager_models.Event.objects.filter(type_of_event='match',
+                                                                  date_of_the_event__month=month_index)
+        return month, matches
+
+    def get_queryset(self) -> information_manager_models.Event:
+        try:
+            return information_manager_models.Event.objects.get(id=self.match_id)
+        except information_manager_models.Event.DoesNotExist:
+            return None
