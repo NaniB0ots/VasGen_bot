@@ -48,21 +48,70 @@ def matches(message):
 
 @bot.callback_query_handler(func=lambda message: 'enable_match_notif' in message.data)
 def enable_match_notifications(message):
+    """
+    Включить напоминание о матче
+    :param message:
+    :return:
+    """
     chat_id = message.message.chat.id
     message_id = message.message.message_id
     data = json.loads(message.data)['enable_match_notif']
 
     bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,
-                                  reply_markup=keyboards.get_inline_match_keyboard(event_id=data['event_id'],
-                                                                                   is_notification_active=True))
+                                  reply_markup=keyboards.get_inline_match_keyboard(event_id=data['id'],
+                                                                                   is_notification_active=True,
+                                                                                   is_text_translation_active=data[
+                                                                                       'transl']))
 
 
 @bot.callback_query_handler(func=lambda message: 'disable_match_notif' in message.data)
 def disable_match_notifications(message):
+    """
+    Выключить напоминание о матче
+    :param message:
+    :return:
+    """
     chat_id = message.message.chat.id
     message_id = message.message.message_id
     data = json.loads(message.data)['disable_match_notif']
 
     bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,
-                                  reply_markup=keyboards.get_inline_match_keyboard(event_id=data['event_id'],
-                                                                                   is_notification_active=False))
+                                  reply_markup=keyboards.get_inline_match_keyboard(event_id=data['id'],
+                                                                                   is_notification_active=False,
+                                                                                   is_text_translation_active=data[
+                                                                                       'transl']
+                                                                                   ))
+
+
+@bot.callback_query_handler(func=lambda message: 'enable_translation' in message.data)
+def enable_text_translation(message):
+    """
+    Включить текстовую трансляцию
+    :param message:
+    :return:
+    """
+    chat_id = message.message.chat.id
+    message_id = message.message.message_id
+    data = json.loads(message.data)['enable_translation']
+    bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,
+                                  reply_markup=keyboards.get_inline_match_keyboard(event_id=data['id'],
+                                                                                   is_text_translation_active=True,
+                                                                                   is_notification_active=data[
+                                                                                       'notif']))
+
+
+@bot.callback_query_handler(func=lambda message: 'disable_translation' in message.data)
+def disable_text_translation(message):
+    """
+    Выключить текстовую трансляцию
+    :param message:
+    :return:
+    """
+    chat_id = message.message.chat.id
+    message_id = message.message.message_id
+    data = json.loads(message.data)['disable_translation']
+    bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,
+                                  reply_markup=keyboards.get_inline_match_keyboard(event_id=data['id'],
+                                                                                   is_text_translation_active=False,
+                                                                                   is_notification_active=data[
+                                                                                       'notif']))

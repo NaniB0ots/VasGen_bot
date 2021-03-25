@@ -40,7 +40,8 @@ def get_inline_match_keyboard(event_id: int,
         notification_callback_data = json.dumps({
             'enable_match_notif':
                 {
-                    'event_id': event_id,
+                    'id': event_id,
+                    'transl': is_text_translation_active
                 }
         })
     else:
@@ -48,7 +49,8 @@ def get_inline_match_keyboard(event_id: int,
         notification_callback_data = json.dumps({
             'disable_match_notif':
                 {
-                    'event_id': event_id,
+                    'id': event_id,
+                    'transl': is_text_translation_active
                 }
         })
 
@@ -56,8 +58,22 @@ def get_inline_match_keyboard(event_id: int,
 
     if not is_text_translation_active:
         translation_text = 'Подписаться на текстовую трансляцию '
+        translation_callback_data = json.dumps({
+            'enable_translation':
+                {
+                    'id': event_id,
+                    'notif': is_notification_active
+                }
+        })
     else:
         translation_text = 'Отписаться от текстовой трансляции ✅'
+        translation_callback_data = json.dumps({
+            'disable_translation':
+                {
+                    'id': event_id,
+                    'notif': is_notification_active
+                }
+        })
 
-    markup.add(types.InlineKeyboardButton(text=translation_text, callback_data='123'))
+    markup.add(types.InlineKeyboardButton(text=translation_text, callback_data=translation_callback_data))
     return markup
