@@ -16,7 +16,7 @@ TG_TOKEN_ADMIN = os.environ.get('TG_TOKEN_ADMIN')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') in ['True', 'on']
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
