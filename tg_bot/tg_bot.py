@@ -1,7 +1,7 @@
 import json
 
 from project.settings import TG_TOKEN
-from tg_bot import core
+from tg_bot import core, models
 from tg_bot.core import Bot
 from tg_bot.utils import keyboards
 
@@ -40,10 +40,20 @@ def matches(message):
     bot.send_message(chat_id=chat_id, text=f'Список матчей\n'
                                            f'{month}')
     for match in matches:
+
+        try:
+            match.users_for_text_translation.get(chat_id=chat_id)
+            is_text_translation_active = True
+        except models.TgUser.DoesNotExist:
+            is_text_translation_active = False
+
         bot.send_message(chat_id=chat_id, text=f'{match.title}\n'
                                                f'{match.date_of_the_event.date().strftime("%d.%m.%Y")}\n\n'
                                                f'{match.description}',
-                         reply_markup=keyboards.get_inline_match_keyboard(event_id=match.id))
+                         reply_markup=keyboards.get_inline_match_keyboard(
+                             event_id=match.id,
+                             is_text_translation_active=is_text_translation_active
+                         ))
 
 
 @bot.callback_query_handler(func=lambda message: 'enable_match_notif' in message.data)
