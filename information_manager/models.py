@@ -89,8 +89,8 @@ class Event(models.Model):
     photo = models.FileField(verbose_name='Фото', upload_to='events/%Y/%m/%d/', blank=True)
     teams = models.ManyToManyField(Team, blank=True, verbose_name='Команды')
 
-    users_for_notifications = models.ManyToManyField(TgUser, verbose_name='Пользователи для уведомлений')
-    users_for_text_translation = models.ManyToManyField(TgUser, related_name='users_for_text_translation',
+    users_for_notifications = models.ManyToManyField(TgUser, blank=True, verbose_name='Пользователи для уведомлений')
+    users_for_text_translation = models.ManyToManyField(TgUser, blank=True, related_name='users_for_text_translation',
                                                         verbose_name='Пользователи для текстовой трансляции')
 
     class Meta:
