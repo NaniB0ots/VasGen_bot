@@ -86,8 +86,8 @@ class Match:
     def enable_text_translation(self, user: User):
         self.object.users_for_text_translation.add(user.object.id)
 
-    def disable_text_translation(self, chat_id):
-        pass
+    def disable_text_translation(self, user: User):
+        self.object.users_for_text_translation.remove(user.object.id)
 
     @staticmethod
     def get_matches_this_month() -> (str, list):
