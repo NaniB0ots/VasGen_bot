@@ -53,22 +53,22 @@ class Team(models.Model):
 
 
 class Player(models.Model):
-    lastname = models.CharField(max_length=25, verbose_name='Фамилия')
-    firstname = models.CharField(max_length=25, verbose_name='Имя')
-    patronymic = models.CharField(max_length=25, verbose_name='Отчество', blank=True)
+    lastname = models.CharField(max_length=80, verbose_name='Фамилия')
+    firstname = models.CharField(max_length=80, verbose_name='Имя')
+    patronymic = models.CharField(max_length=80, verbose_name='Отчество', blank=True)
     birthdate = models.DateField(verbose_name='Дата рождения', blank=True, null=True)
     photo = models.FileField(verbose_name='Фото', upload_to='players/', blank=True)
 
-    playing_position = models.CharField(max_length=25, verbose_name='Амплуа', blank=True)
+    playing_position = models.CharField(max_length=80, verbose_name='Амплуа', blank=True)
     is_captain = models.BooleanField(default=False, verbose_name='Капитан')
 
     brief_information = models.TextField(verbose_name='Краткая информация', blank=True)
     progress = models.TextField(verbose_name='Достижения (карьера)', blank=True)
 
-    wins = models.IntegerField(default=0, verbose_name='Победы')
-    losses = models.IntegerField(default=0, verbose_name='Поражения')
-    goals_scored = models.IntegerField(default=0, verbose_name='Забитые голы')
-    assists = models.IntegerField(default=0, verbose_name='Голевые передачи')
+    wins = models.IntegerField(verbose_name='Победы', blank=True, null=True)
+    losses = models.IntegerField(verbose_name='Поражения', blank=True, null=True)
+    goals_scored = models.IntegerField(verbose_name='Забитые голы', blank=True, null=True)
+    assists = models.IntegerField(verbose_name='Голевые передачи', blank=True, null=True)
 
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
@@ -79,7 +79,36 @@ class Player(models.Model):
         ordering = ('lastname', 'firstname')
 
     def __str__(self):
-        return f'{self.firstname} {self.lastname}'
+        return f'{self.lastname} {self.firstname}'
+
+
+class CoachingStaff(models.Model):
+    lastname = models.CharField(max_length=80, verbose_name='Фамилия')
+    firstname = models.CharField(max_length=80, verbose_name='Имя')
+    patronymic = models.CharField(max_length=80, verbose_name='Отчество', blank=True)
+    birthdate = models.DateField(verbose_name='Дата рождения', blank=True, null=True)
+    photo = models.FileField(verbose_name='Фото', upload_to='players/', blank=True)
+
+    post = models.CharField(max_length=80, verbose_name='Должность', blank=True)
+
+    brief_information = models.TextField(verbose_name='Краткая информация', blank=True)
+    progress = models.TextField(verbose_name='Достижения (карьера)', blank=True)
+
+    wins = models.IntegerField(verbose_name='Победы', blank=True, null=True)
+    losses = models.IntegerField(verbose_name='Поражения', blank=True, null=True)
+    goals_scored = models.IntegerField(verbose_name='Голы', blank=True, null=True)
+    goalscoring_matches = models.IntegerField(verbose_name='Голевые матчи', blank=True, null=True)
+
+    creation_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Тренерский штаб'
+        verbose_name_plural = 'Тренерский штаб'
+        ordering = ('lastname', 'firstname')
+
+    def __str__(self):
+        return f'{self.lastname} {self.firstname}'
 
 
 class Event(models.Model):

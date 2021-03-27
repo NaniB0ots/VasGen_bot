@@ -31,6 +31,14 @@ class PlayerAdmin(admin.ModelAdmin):
     ordering = ['lastname', 'firstname']
 
 
+@admin.register(models.CoachingStaff)
+class CoachingStaffAdmin(admin.ModelAdmin):
+    list_display = ('lastname', 'firstname', 'patronymic', 'post',)
+    search_fields = ('lastname', 'firstname', 'patronymic', 'post',)
+    list_filter = ('post',)
+    ordering = ['lastname', 'firstname']
+
+
 @admin.register(models.Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'date_of_the_event', 'type_of_event')
