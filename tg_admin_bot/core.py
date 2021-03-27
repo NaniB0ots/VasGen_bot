@@ -100,3 +100,16 @@ class TextTranslation:
         :return:
         """
         tg_user_bot.send_message_text_translation(match=self.object, text=text)
+
+
+class TgNews:
+    def __init__(self, text, message_id):
+        self.text = text
+        self.message_id = message_id
+
+    def get_object(self):
+        return models.AdminNews.objects.get_or_create(text=self.text, message_id=self.message_id)
+
+    def send_news(self):
+        self.get_object()
+        tg_user_bot.

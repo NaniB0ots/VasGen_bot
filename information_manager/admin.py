@@ -25,10 +25,10 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(models.Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('firstname', 'lastname', 'team', 'playing_position')
-    search_fields = ('firstname', 'lastname', 'team', 'playing_position', 'patronymic', 'age')
-    list_filter = ('is_captain', 'team')
-    ordering = ['-update_date']
+    list_display = ('lastname', 'firstname', 'patronymic', 'playing_position', 'is_captain',)
+    search_fields = ('lastname', 'firstname', 'patronymic', 'is_captain', 'playing_position',)
+    list_filter = ('is_captain', 'playing_position')
+    ordering = ['lastname', 'firstname']
 
 
 @admin.register(models.Event)
