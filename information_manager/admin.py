@@ -3,14 +3,6 @@ from django.contrib import admin
 from information_manager import models
 
 
-@admin.register(models.News)
-class TgUserAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author')
-    search_fields = ('title', 'news',)
-    list_filter = ('author', 'tags')
-    ordering = ['-update_date']
-
-
 @admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
     pass
@@ -44,3 +36,15 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'date_of_the_event', 'type_of_event')
     search_fields = ('title', 'description', 'date_of_the_event')
     ordering = ['-update_date']
+
+
+@admin.register(models.News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'creation_date', 'update_date', 'author',)
+    search_fields = ('title', 'news',)
+    list_filter = ('author', 'tags')
+
+
+@admin.register(models.SentNews)
+class SentNewsAdmin(admin.ModelAdmin):
+    list_display = ('news', 'user', 'message_id')

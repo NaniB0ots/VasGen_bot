@@ -112,4 +112,4 @@ class TgNews:
 
     def send_news(self):
         self.get_object()
-        tg_user_bot.
+

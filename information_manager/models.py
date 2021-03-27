@@ -16,7 +16,7 @@ class Tag(models.Model):
 
 
 class News(models.Model):
-    title = models.CharField(max_length=60, verbose_name='Название')
+    title = models.CharField(max_length=60, verbose_name='Название', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, verbose_name='Автор')
@@ -31,6 +31,23 @@ class News(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+
+class SentNews(models.Model):
+    news = models.ForeignKey(News, on_delete=models.CASCADE, verbose_name='Новость', )
+    user = models.ForeignKey(TgUser, on_delete=models.CASCADE, verbose_name='Телеграм пользователь')
+    message_id = models.IntegerField()
+
+    creation_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Отправленная новость'
+        verbose_name_plural = 'Отправленные новости'
+        ordering = ('-update_date',)
+
+    def __str__(self):
+        return f'{self.news}'
 
 
 class Team(models.Model):
