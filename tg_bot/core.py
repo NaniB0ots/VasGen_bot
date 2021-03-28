@@ -82,7 +82,6 @@ class Bot(telebot.TeleBot):
 
             # действие выполняется кадую минуту
             if minutes_old != now.minute:
-                print('Время сейчас', now)
                 minutes_old = now.minute
 
                 # определяем время матча через день
