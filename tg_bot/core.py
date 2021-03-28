@@ -131,9 +131,17 @@ class Bot(telebot.TeleBot):
         for match in matches_queryset:
             for user in users:
                 try:
+                    match.users_for_text_translation.get(chat_id=user.chat_id)
+                    is_text_translation_active = True
+                except models.TgUser.DoesNotExist:
+                    is_text_translation_active = False
+
+                try:
                     self.send_message(
                         chat_id=user.chat_id, text=f'{title}' + Match.get_match_info(match),
-                        reply_markup=keyboards.get_inline_match_keyboard(event_id=match.id))
+                        reply_markup=keyboards.get_inline_match_keyboard(
+                            event_id=match.id,
+                            is_text_translation_active=is_text_translation_active))
                 except Exception as e:
                     continue
 
