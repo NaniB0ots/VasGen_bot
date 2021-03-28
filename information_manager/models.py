@@ -142,6 +142,7 @@ class Event(models.Model):
     class Meta:
         verbose_name = 'Мероприятие'
         verbose_name_plural = 'Мероприятия'
+        ordering = ('date_of_the_event',)
 
     def __str__(self):
         return f'{self.title}'
