@@ -77,8 +77,7 @@ class Player(models.Model):
     brief_information = models.TextField(verbose_name='Краткая информация', blank=True)
     progress = models.TextField(verbose_name='Достижения (карьера)', blank=True)
 
-    wins = models.IntegerField(verbose_name='Победы', blank=True, null=True)
-    losses = models.IntegerField(verbose_name='Поражения', blank=True, null=True)
+    number_of_matches = models.IntegerField(verbose_name='Количество матчей', blank=True, null=True)
     goals_scored = models.IntegerField(verbose_name='Забитые голы', blank=True, null=True)
     assists = models.IntegerField(verbose_name='Голевые передачи', blank=True, null=True)
 
@@ -106,10 +105,9 @@ class CoachingStaff(models.Model):
     brief_information = models.TextField(verbose_name='Краткая информация', blank=True)
     progress = models.TextField(verbose_name='Достижения (карьера)', blank=True)
 
-    wins = models.IntegerField(verbose_name='Победы', blank=True, null=True)
-    losses = models.IntegerField(verbose_name='Поражения', blank=True, null=True)
+    number_of_matches = models.IntegerField(verbose_name='Количество матчей', blank=True, null=True)
     goals_scored = models.IntegerField(verbose_name='Голы', blank=True, null=True)
-    goalscoring_matches = models.IntegerField(verbose_name='Голевые матчи', blank=True, null=True)
+    assists = models.IntegerField(verbose_name='Голевые передачи', blank=True, null=True)
 
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
