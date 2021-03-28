@@ -69,6 +69,23 @@ class Bot(telebot.TeleBot):
                 print(e)
                 continue
 
+    def delete_sent_news(self, news_id):
+        """
+        Удаление отправленных новостей
+        :param news_id:
+        :return:
+        """
+        sent_news_info = information_manager_models.SentNews.objects.filter(news__id=news_id)
+        for news in sent_news_info:
+            try:
+                self.delete_message(chat_id=news.user.chat_id, message_id=news.message_id)
+            except Exception as e:
+                continue
+        try:
+            information_manager_models.News.objects.get(id=news_id).delete()
+        except information_manager_models.News.DoesNotExist:
+            pass
+
     def start_reminders(self):
         """
         Запуск сервиса напоминаний

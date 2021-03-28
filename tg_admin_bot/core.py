@@ -144,3 +144,7 @@ class TgNews:
     @staticmethod
     def get_last_news() -> information_manager_models.News:
         return information_manager_models.News.objects.last()
+
+    @staticmethod
+    def delete_news(news_id):
+        tg_user_bot.delete_sent_news(news_id=news_id)

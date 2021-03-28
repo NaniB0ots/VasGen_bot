@@ -226,6 +226,24 @@ def delete_last_news(message):
                          reply_markup=keyboards.get_news_keyboard())
 
 
+@bot.callback_query_handler(func=lambda message: 'delete_news' in message.data)
+def delete_last_news_confirm(message):
+    chat_id = message.message.chat.id
+    message_id = message.message.message_id
+    data = json.loads(message.data)['delete_news']
+
+    bot.delete_message(chat_id=chat_id, message_id=message_id)
+    if data == 'cancel':
+        return
+
+    bot.send_message(chat_id=chat_id, text='Удаляем...')
+
+    delete_news_id = data
+    core.TgNews.delete_news(news_id=delete_news_id)
+
+    bot.send_message(chat_id=chat_id, text='Новость удалена', reply_markup=keyboards.get_main_menu_keyboard())
+
+
 @bot.message_handler()
 def invalid_message(message):
     """
