@@ -43,6 +43,11 @@ class AdminBot(telebot.TeleBot):
 
         return message
 
+    @staticmethod
+    def get_error_text() -> str:
+        message = 'Что-то пошло не так... Попробуйте ещё раз'
+        return message
+
 
 class User:
     def __init__(self, chat_id):
@@ -103,13 +108,23 @@ class TextTranslation:
 
 
 class TgNews:
-    def __init__(self, text, message_id):
+    def __init__(self, news_id: int = None, text: str = None):
         self.text = text
-        self.message_id = message_id
+        self.news_id = news_id
+        self.object = self.get_object()
 
-    def get_object(self):
-        return models.AdminNews.objects.get_or_create(text=self.text, message_id=self.message_id)
+    def get_object(self) -> information_manager_models.News:
+        """
+        Получение или создание объекта из базы данных
+        :return:
+        """
+        if self.news_id:
+            try:
+                return information_manager_models.News.objects.get(id=self.news_id)
+            except information_manager_models.News.DoesNotExist:
+                information_manager_models.News.objects.none()
+        elif self.text:
+            return information_manager_models.News.objects.create(news=self.text, created_via_telegram=True)
 
     def send_news(self):
-        self.get_object()
-
+        pass

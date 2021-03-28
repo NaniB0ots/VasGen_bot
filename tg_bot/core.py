@@ -39,8 +39,9 @@ class Bot(telebot.TeleBot):
         for user in users:
             self.send_message(chat_id=user.chat_id, text=title + text)
 
-    def send_news(self):
+    def send_news(self, match: information_manager_models.News):
         pass
+
 
 class User:
     def __init__(self, chat_id):

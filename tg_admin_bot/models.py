@@ -28,13 +28,3 @@ class TgAdminUser(models.Model):
         return f'{self.chat_id}'
 
 
-class AdminNews(models.Model):
-    text = models.TextField(verbose_name='Текст новости')
-    message_id = models.IntegerField()
-
-    class Meta:
-        verbose_name = 'Новость созданная через телеграм'
-        verbose_name_plural = 'Новость созданная через телеграм'
-
-    def __str__(self):
-        return f'{self.text[:50]}'
