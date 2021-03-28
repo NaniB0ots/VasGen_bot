@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # запуск напоминаний
-        start_reminders = Thread(target=bot.start_reminders)
+        start_reminders = Thread(target=bot.start_reminders, daemon=True)
         start_reminders.start()
 
         print('Бот запущен...')

@@ -1,5 +1,8 @@
 import telebot
 import datetime
+
+from django.utils import timezone
+
 from information_manager import models as information_manager_models
 from tg_bot import models
 from tg_bot.utils import keyboards
@@ -205,8 +208,8 @@ class Match:
     @staticmethod
     def get_match_info(match_query) -> str:
         text = f'{match_query.title}\n' \
-               f'{match_query.date_of_the_event.date().strftime("%d.%m.%Y")}\n' \
-               f'Время: {match_query.date_of_the_event.time().strftime("%H:%M")}\n' \
+               f'{timezone.localtime(match_query.date_of_the_event).date().strftime("%d.%m.%Y")}\n' \
+               f'Время: {timezone.localtime(match_query.date_of_the_event).time().strftime("%H:%M")}\n' \
                f'{match_query.description}'
 
         return text
