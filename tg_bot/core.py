@@ -37,7 +37,10 @@ class Bot(telebot.TeleBot):
                 f'{match.title}\n' \
                 f'----------------------------------\n'
         for user in users:
-            self.send_message(chat_id=user.chat_id, text=title + text)
+            try:
+                self.send_message(chat_id=user.chat_id, text=title + text)
+            except Exception as e:
+                continue
 
     def send_news(self, news: information_manager_models.News):
         """
@@ -54,7 +57,10 @@ class Bot(telebot.TeleBot):
         text = news.news
 
         for user in users:
-            self.send_message(chat_id=user.chat_id, text=title + text)
+            try:
+                self.send_message(chat_id=user.chat_id, text=title + text)
+            except Exception as e:
+                continue
 
 
 class User:
