@@ -46,9 +46,9 @@ def matches(message):
             is_text_translation_active = True
         except models.TgUser.DoesNotExist:
             is_text_translation_active = False
-
         bot.send_message(chat_id=chat_id, text=f'{match.title}\n'
-                                               f'{match.date_of_the_event.date().strftime("%d.%m.%Y")}\n\n'
+                                               f'{match.date_of_the_event.date().strftime("%d.%m.%Y")}\n'
+                                               f'Время: {match.date_of_the_event.time().strftime("%H:%M")}\n'
                                                f'{match.description}',
                          reply_markup=keyboards.get_inline_match_keyboard(
                              event_id=match.id,
