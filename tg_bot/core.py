@@ -1,7 +1,8 @@
 import telebot
 import datetime
 
-from django.utils import timezone
+from django.conf import settings
+from django.utils import timezone, dateformat
 
 from information_manager import models as information_manager_models
 from tg_bot import models
@@ -220,7 +221,7 @@ class Match:
     @staticmethod
     def get_match_info(match_query) -> str:
         text = f'{match_query.title}\n' \
-               f'{timezone.localtime(match_query.date_of_the_event).date().strftime("%d.%m.%Y")}\n' \
+               f'{dateformat.format(timezone.localtime(match_query.date_of_the_event).date(), settings.DATE_FORMAT)}\n' \
                f'Время: {timezone.localtime(match_query.date_of_the_event).time().strftime("%H:%M")}\n' \
                f'{match_query.description}'
 
@@ -231,11 +232,14 @@ class Match:
         month_list = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
                       'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
 
-        month_index = datetime.datetime.now().month
+        now = datetime.datetime.now()
+
+        month_index = now.month
         month = month_list[month_index - 1]
 
         matches = information_manager_models.Event.objects.filter(type_of_event='match',
-                                                                  date_of_the_event__month=month_index)
+                                                                  date_of_the_event__month=month_index,
+                                                                  date_of_the_event__gte=now)
         return month, matches
 
     def get_queryset(self) -> information_manager_models.Event:
