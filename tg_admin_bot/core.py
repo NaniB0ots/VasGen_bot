@@ -57,14 +57,16 @@ class AdminBot(telebot.TeleBot):
 class User:
     def __init__(self, chat_id):
         self.chat_id = chat_id
+        self.object = self.get_object()
+
+    def get_object(self):
+        try:
+            return models.TgAdminUser.objects.get(chat_id=self.chat_id)
+        except models.TgAdminUser.DoesNotExist:
+            models.TgAdminUser.objects.none()
 
     def is_authenticated(self):
-
-        try:
-            models.TgAdminUser.objects.get(chat_id=self.chat_id)
-            return True
-        except models.TgAdminUser.DoesNotExist:
-            return False
+        return self.get_object()
 
     @staticmethod
     def authorization(chat_id, token, username):
@@ -113,9 +115,10 @@ class TextTranslation:
 
 
 class TgNews:
-    def __init__(self, news_id: int = None, text: str = None):
+    def __init__(self, news_id: int = None, text: str = None, author: User = None):
         self.text = text
         self.news_id = news_id
+        self.author = author
         self.object = self.get_object()
 
     def get_object(self) -> information_manager_models.News:
@@ -129,7 +132,8 @@ class TgNews:
             except information_manager_models.News.DoesNotExist:
                 information_manager_models.News.objects.none()
         elif self.text:
-            return information_manager_models.News.objects.create(news=self.text, created_via_telegram=True)
+            return information_manager_models.News.objects.create(news=self.text, created_via_telegram=True,
+                                                                  telegram_author=self.author.object)
 
     def send_news(self):
         if self.object:

@@ -1,18 +1,8 @@
 from django.db import models
 
 from tg_bot.models import TgUser
+from tg_admin_bot.models import TgAdminUser
 from user_profile.models import Profile
-
-
-class Tag(models.Model):
-    tag = models.CharField(max_length=30, verbose_name='Тег')
-
-    class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
-
-    def __str__(self):
-        return f'{self.tag}'
 
 
 class News(models.Model):
@@ -20,11 +10,12 @@ class News(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
     news = models.TextField(verbose_name='Текст новости')
 
-    tags = models.ManyToManyField(Tag, verbose_name='Теги', blank=True)
     photo = models.FileField(verbose_name='Фото', upload_to='news/%Y/%m/%d/', blank=True)
     source = models.URLField(verbose_name='Источник', blank=True)
 
     created_via_telegram = models.BooleanField(default=False, verbose_name='Создано через телеграм')
+    telegram_author = models.ForeignKey(TgAdminUser, on_delete=models.SET_NULL, blank=True, null=True,
+                                        verbose_name='Телеграм автор')
 
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)

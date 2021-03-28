@@ -3,11 +3,6 @@ from django.contrib import admin
 from information_manager import models
 
 
-@admin.register(models.Tag)
-class TagAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('title', 'educational_institution')
@@ -40,9 +35,9 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(models.News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('news', 'title', 'creation_date', 'update_date', 'author',)
+    list_display = ('news', 'creation_date', 'author', 'created_via_telegram', 'telegram_author',)
     search_fields = ('title', 'news',)
-    list_filter = ('author', 'tags')
+    list_filter = ('author',)
 
 
 @admin.register(models.SentNews)

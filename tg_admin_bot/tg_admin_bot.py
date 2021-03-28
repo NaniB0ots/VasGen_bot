@@ -116,6 +116,7 @@ def translation(message, match_id):
         return
 
     match_translation = core.TextTranslation(match_id)
+    bot.send_message(chat_id=chat_id, text='Отправка...')
     match_translation.send_text_translation_message(text=text)
     msg = bot.send_message(chat_id=chat_id, text='Собщение отправлено')
     bot.register_next_step_handler(msg, translation, match_id=match_id)
@@ -182,8 +183,9 @@ def write_news(message):
         write_news_cancel(message)
         return
 
-    news = core.TgNews(text=text)
+    news = core.TgNews(text=text, author=user)
     if news.object:
+        bot.send_message(chat_id=chat_id, text='Отправка...')
         news.send_news()
         bot.send_message(chat_id=chat_id, text='Новость успшно отправлена',
                          reply_markup=keyboards.get_main_menu_keyboard())

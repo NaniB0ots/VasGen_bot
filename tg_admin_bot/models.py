@@ -15,8 +15,9 @@ class AdminUserToken(models.Model):
 
 
 class TgAdminUser(models.Model):
+    username = models.CharField(max_length=90)
     chat_id = models.IntegerField()
-    username = models.CharField(max_length=60)
+
     creation_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания аккаунта')
     token = models.OneToOneField(AdminUserToken, verbose_name='Токен регистрации', on_delete=models.PROTECT)
 
@@ -25,6 +26,4 @@ class TgAdminUser(models.Model):
         verbose_name_plural = 'Телеграм админ'
 
     def __str__(self):
-        return f'{self.chat_id}'
-
-
+        return f'{self.username}'
