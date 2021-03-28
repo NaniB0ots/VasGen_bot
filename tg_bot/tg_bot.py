@@ -1,5 +1,5 @@
 import json
-from threading import Thread
+
 
 from project.settings import TG_TOKEN
 from tg_bot import core, models
@@ -137,5 +137,4 @@ def disable_text_translation(message):
                                                                                        'notif']))
 
 
-start_reminders = Thread(target=bot.start_reminders)
-start_reminders.start()
+
