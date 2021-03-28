@@ -40,7 +40,7 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(models.News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'creation_date', 'update_date', 'author',)
+    list_display = ('news', 'title', 'creation_date', 'update_date', 'author',)
     search_fields = ('title', 'news',)
     list_filter = ('author', 'tags')
 

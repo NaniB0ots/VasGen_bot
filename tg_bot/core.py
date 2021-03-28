@@ -58,7 +58,8 @@ class Bot(telebot.TeleBot):
 
         for user in users:
             try:
-                self.send_message(chat_id=user.chat_id, text=title + text)
+                msg = self.send_message(chat_id=user.chat_id, text=title + text)
+                information_manager_models.SentNews.objects.create(news=news, user=user, message_id=msg.message_id)
             except Exception as e:
                 continue
 
