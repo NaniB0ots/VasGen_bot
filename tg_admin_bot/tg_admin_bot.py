@@ -206,6 +206,26 @@ def write_news_cancel(message):
                      reply_markup=keyboards.get_news_keyboard())
 
 
+@bot.message_handler(regexp='^Удалить последнюю новость$')
+def delete_last_news(message):
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    last_news = core.TgNews.get_last_news()
+    if last_news:
+
+        bot.send_message(chat_id=chat_id, text=f'Вы уверены что хотите удалить новость:\n'
+                                               f'"{last_news}"?',
+                         reply_markup=keyboards.get_inline_confirm_delete_news_keyboard(last_news.id))
+    else:
+        bot.send_message(chat_id=chat_id, text='Список новостей пуст',
+                         reply_markup=keyboards.get_news_keyboard())
+
+
 @bot.message_handler()
 def invalid_message(message):
     """

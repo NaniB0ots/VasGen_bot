@@ -54,3 +54,15 @@ def get_cancel_write_news_keyboard():
     markup.add(btn1)
 
     return markup
+
+
+def get_inline_confirm_delete_news_keyboard(news_id: int):
+    markup = types.InlineKeyboardMarkup()
+
+    callback_data_confirm = json.dumps({'delete_news': news_id})
+    markup.add(types.InlineKeyboardButton(text='Да, удалить', callback_data=callback_data_confirm))
+
+    callback_data_cancel = json.dumps({'delete_news': 'cancel'})
+    markup.add(types.InlineKeyboardButton(text='Отмена', callback_data=callback_data_cancel))
+
+    return markup

@@ -140,3 +140,7 @@ class TgNews:
             tg_user_bot.send_news(news=self.object)
         else:
             ValueError('Объект новости не создан')
+
+    @staticmethod
+    def get_last_news() -> information_manager_models.News:
+        return information_manager_models.News.objects.last()
