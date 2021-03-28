@@ -2,6 +2,8 @@ import telebot
 import datetime
 from information_manager import models as information_manager_models
 from tg_bot import models
+from tg_bot.utils import keyboards
+from threading import Thread
 
 
 class Bot(telebot.TeleBot):
@@ -63,6 +65,66 @@ class Bot(telebot.TeleBot):
             except Exception as e:
                 print(e)
                 continue
+
+    def start_reminders(self):
+
+        minutes_old = None
+        while True:
+            now = datetime.datetime.now()
+
+            # действие выполняется кадую минуту
+            if minutes_old != now.minute:
+                print('Время сейчас', now)
+                minutes_old = now.minute
+
+                # определяем время матча через день
+                time_very_other_day = now + datetime.timedelta(days=1)
+                date_matches_very_other_day = time_very_other_day.date()
+                hours_matches_very_other_day = time_very_other_day.hour
+                minutes_matches_very_other_day = time_very_other_day.minute
+
+                # получаем матчи которые будут через день
+                matches_every_other_day = information_manager_models.Event.objects.filter(
+                    type_of_event='match',
+                    date_of_the_event__date=date_matches_very_other_day,
+                    date_of_the_event__hour=hours_matches_very_other_day,
+                    date_of_the_event__minute=minutes_matches_very_other_day)
+
+                # определяем время матча через час
+                time_matches_in_an_hour = now + datetime.timedelta(hours=1)
+                date_matches_in_an_hour = time_matches_in_an_hour.date()
+                hours_matches_in_an_hour = time_matches_in_an_hour.hour
+                minutes_matches_in_an_hour = time_matches_in_an_hour.minute
+
+                # получаем матчи которые будут через час
+                matches_in_an_hour = information_manager_models.Event.objects.filter(
+                    type_of_event='match',
+                    date_of_the_event__date=date_matches_in_an_hour,
+                    date_of_the_event__hour=hours_matches_in_an_hour,
+                    date_of_the_event__minute=minutes_matches_in_an_hour)
+
+                print('Через день', matches_every_other_day)
+                print('Через час', matches_in_an_hour)
+
+                if matches_in_an_hour:
+                    send_reminders_an_hour = Thread(target=self._send_reminders_an_hour, args=(matches_in_an_hour,))
+                    send_reminders_an_hour.start()
+
+    def _send_reminders_an_hour(self, matches_in_an_hour):
+        title = 'Уже через час!\n'
+        users = models.TgUser.objects.filter(event_notifications=True)
+        for match in matches_in_an_hour:
+            for user in users:
+                try:
+                    self.send_message(
+                        chat_id=user.chat_id, text=f'{title}'
+                                                   f'{match.title}\n'
+                                                   f'{match.date_of_the_event.date().strftime("%d.%m.%Y")}\n'
+                                                   f'Время: {match.date_of_the_event.time().strftime("%H:%M")}\n'
+                                                   f'{match.description}',
+                        reply_markup=keyboards.get_inline_match_keyboard(event_id=match.id))
+                except Exception as e:
+                    continue
 
 
 class User:
