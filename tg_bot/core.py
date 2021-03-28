@@ -117,11 +117,7 @@ class Bot(telebot.TeleBot):
             for user in users:
                 try:
                     self.send_message(
-                        chat_id=user.chat_id, text=f'{title}'
-                                                   f'{match.title}\n'
-                                                   f'{match.date_of_the_event.date().strftime("%d.%m.%Y")}\n'
-                                                   f'Время: {match.date_of_the_event.time().strftime("%H:%M")}\n'
-                                                   f'{match.description}',
+                        chat_id=user.chat_id, text=f'{title}' + Match.get_match_info(match),
                         reply_markup=keyboards.get_inline_match_keyboard(event_id=match.id))
                 except Exception as e:
                     continue
@@ -175,6 +171,15 @@ class Match:
 
     def disable_text_translation(self, user: User):
         self.object.users_for_text_translation.remove(user.object.id)
+
+    @staticmethod
+    def get_match_info(match_query) -> str:
+        text = f'{match_query.title}\n' \
+               f'{match_query.date_of_the_event.date().strftime("%d.%m.%Y")}\n' \
+               f'Время: {match_query.date_of_the_event.time().strftime("%H:%M")}\n' \
+               f'{match_query.description}'
+
+        return text
 
     @staticmethod
     def get_matches_this_month() -> (str, list):

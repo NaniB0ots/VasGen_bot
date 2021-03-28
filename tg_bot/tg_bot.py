@@ -47,10 +47,7 @@ def matches(message):
         except models.TgUser.DoesNotExist:
             is_text_translation_active = False
 
-        bot.send_message(chat_id=chat_id, text=f'{match.title}\n'
-                                               f'{match.date_of_the_event.date().strftime("%d.%m.%Y")}\n'
-                                               f'Время: {match.date_of_the_event.time().strftime("%H:%M")}\n'
-                                               f'{match.description}',
+        bot.send_message(chat_id=chat_id, text=core.Match.get_match_info(match),
                          reply_markup=keyboards.get_inline_match_keyboard(
                              event_id=match.id,
                              is_text_translation_active=is_text_translation_active
@@ -138,5 +135,4 @@ def disable_text_translation(message):
                                                                                    is_notification_active=data[
                                                                                        'notif']))
 
-
-#bot.start_reminders()
+# bot.start_reminders()
