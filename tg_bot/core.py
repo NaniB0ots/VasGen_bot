@@ -35,12 +35,26 @@ class Bot(telebot.TeleBot):
         users = match.users_for_text_translation.all()
         title = 'Текстовая трансляция\n' \
                 f'{match.title}\n' \
-                f'----------------------------------\n\n'
+                f'----------------------------------\n'
         for user in users:
             self.send_message(chat_id=user.chat_id, text=title + text)
 
-    def send_news(self, match: information_manager_models.News):
-        pass
+    def send_news(self, news: information_manager_models.News):
+        """
+        Отправка новости пользователям, у которых включено получение новостей.
+        :param news:
+        :return:
+        """
+        users = models.TgUser.objects.filter(news_subscription=True)
+
+        title = 'Новости\n'
+        title += f'{news.title}\n' if news.title else ''
+        title += '----------------------------------\n'
+
+        text = news.news
+
+        for user in users:
+            self.send_message(chat_id=user.chat_id, text=title + text)
 
 
 class User:
