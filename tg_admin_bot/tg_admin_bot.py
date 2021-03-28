@@ -182,9 +182,10 @@ def write_news(message):
     news = core.TgNews(text=text)
     if news.object:
         news.send_news()
-        bot.send_message(chat_id=chat_id, text='Новость успшно отправлена')
+        bot.send_message(chat_id=chat_id, text='Новость успшно отправлена',
+                         reply_markup=keyboards.get_main_menu_keyboard())
     else:
-        bot.send_message(chat_id=chat_id, text=bot.get_error_text())
+        bot.send_message(chat_id=chat_id, text=bot.get_error_text(), reply_markup=keyboards.get_news_keyboard())
 
 
 @bot.message_handler(regexp='^Отмена$')
