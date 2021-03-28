@@ -109,6 +109,10 @@ USE_TZ = True
 
 if os.environ.get('USE_STATIC_ROOT'):
     STATIC_ROOT = 'static'
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
 
 STATIC_URL = '/static/'
 
