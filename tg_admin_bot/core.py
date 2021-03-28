@@ -4,49 +4,54 @@ import datetime
 from tg_admin_bot import models
 from information_manager import models as information_manager_models
 from tg_bot.tg_bot import bot as tg_user_bot
+from tg_admin_bot.utils import keyboards
 
 
 class AdminBot(telebot.TeleBot):
     @staticmethod
     def get_start_message() -> str:
-        message = 'Добрейшего времени суток, Админ!\n\n' \
-                  'Этот бот создан специально для Вас. ' \
-                  'Он поможет Вам с легкостью управлять ВАСГЕНом прямо с телефона: ' \
-                  'вести текстовую трансляцию во время матча и публиковать актуальные новости :)'
+        text = 'Добрейшего времени суток, Админ!\n\n' \
+               'Этот бот создан специально для Вас. ' \
+               'Он поможет Вам с легкостью управлять ВАСГЕНом прямо с телефона: ' \
+               'вести текстовую трансляцию во время матча и публиковать актуальные новости :)'
 
-        return message
+        return text
 
     @staticmethod
     def get_list_of_commands() -> str:
-        message = '/start - запустить бота'
+        text = '/start - запустить бота'
 
-        return message
+        return text
 
     @staticmethod
     def get_register_message():
-        message = 'Для того чтобы начать пользоваться функциями бота, введите токен авторизации.\n\n ' \
-                  'Токен можно получить у администратора\n' \
-                  '@bolanebyla'
-        return message
+        text = 'Для того чтобы начать пользоваться функциями бота, введите токен авторизации.\n\n ' \
+               'Токен можно получить у администратора\n' \
+               '@bolanebyla'
+        return text
 
     @staticmethod
     def get_instruction() -> str:
-        message = '<Инструкция по пользованию ботом...>'
-        return message
+        text = '<Инструкция по пользованию ботом...>'
+        return text
 
     @staticmethod
     def get_authors() -> str:
-        message = 'Авторы проекта ВасГен бот:\n' \
-                  'Сидоренко Анжелика - @alikastory\n' \
-                  'Лесков Алексей - @bolanebyla\n' \
-                  'Ашимов Султан - @ace_sultan\n'
+        text = 'Авторы проекта ВасГен бот:\n' \
+               'Сидоренко Анжелика - @alikastory\n' \
+               'Лесков Алексей - @bolanebyla\n' \
+               'Ашимов Султан - @ace_sultan\n'
 
-        return message
+        return text
 
     @staticmethod
     def get_error_text() -> str:
-        message = 'Что-то пошло не так... Попробуйте ещё раз'
-        return message
+        text = 'Что-то пошло не так... Попробуйте ещё раз'
+        return text
+
+    def send_invalid_message_answer(self, chat_id):
+        text = 'Я Вас не понимаю. Воспользуйтесь клавиатурой'
+        self.send_message(chat_id=chat_id, text=text, reply_markup=keyboards.get_main_menu_keyboard())
 
 
 class User:

@@ -178,6 +178,9 @@ def write_news(message):
         return
 
     text = message.text
+    if text == 'Отмена':
+        write_news_cancel(message)
+        return
 
     news = core.TgNews(text=text)
     if news.object:
@@ -199,3 +202,21 @@ def write_news_cancel(message):
 
     bot.send_message(chat_id=chat_id, text='Отмена',
                      reply_markup=keyboards.get_news_keyboard())
+
+
+@bot.message_handler()
+def invalid_message(message):
+    """
+    Ответ на текст, который бот не понимает.
+
+    Функция должна быть последней по порядку!
+    :return:
+    """
+    chat_id = message.chat.id
+    user = core.User(chat_id)
+    if not user.is_authenticated():
+        msg = bot.send_message(chat_id=chat_id, text=bot.get_register_message())
+        bot.register_next_step_handler(msg, authorization)
+        return
+
+    bot.send_invalid_message_answer(chat_id=chat_id)
