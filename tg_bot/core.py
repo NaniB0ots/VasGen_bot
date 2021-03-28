@@ -106,11 +106,39 @@ class Bot(telebot.TeleBot):
                 print('Через день', matches_every_other_day)
                 print('Через час', matches_in_an_hour)
 
+                # запускаем потоки с отправкой уведомлений
+                if matches_every_other_day:
+                    send_reminders_every_other_day = Thread(target=self._send_reminders_every_other_day,
+                                                            args=(matches_every_other_day,))
+                    send_reminders_every_other_day.start()
+
                 if matches_in_an_hour:
                     send_reminders_an_hour = Thread(target=self._send_reminders_an_hour, args=(matches_in_an_hour,))
                     send_reminders_an_hour.start()
 
+    def _send_reminders_every_other_day(self, matches_every_other_day):
+        """
+        Отправка уведомлений пользователям за день до события
+        :param matches_every_other_day:
+        :return:
+        """
+        title = 'Уже завтра!\n'
+        users = models.TgUser.objects.filter(event_notifications=True)
+        for match in matches_every_other_day:
+            for user in users:
+                try:
+                    self.send_message(
+                        chat_id=user.chat_id, text=f'{title}' + Match.get_match_info(match),
+                        reply_markup=keyboards.get_inline_match_keyboard(event_id=match.id))
+                except Exception as e:
+                    continue
+
     def _send_reminders_an_hour(self, matches_in_an_hour):
+        """
+        Отправка уведомлений пользователям за час до события
+        :param matches_in_an_hour:
+        :return:
+        """
         title = 'Уже через час!\n'
         users = models.TgUser.objects.filter(event_notifications=True)
         for match in matches_in_an_hour:
