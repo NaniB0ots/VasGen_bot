@@ -1,6 +1,5 @@
 import json
 
-
 from project.settings import TG_TOKEN
 from tg_bot import core, models
 from tg_bot.core import Bot
@@ -30,6 +29,24 @@ def matches(message):
 def matches(message):
     chat_id = message.chat.id
     bot.send_message(chat_id=chat_id, text='Матчи', reply_markup=keyboards.get_matches_keyboard())
+
+
+@bot.message_handler(regexp='^Ближайший матч$')
+def matches(message):
+    chat_id = message.chat.id
+
+    match = core.Match.get_nearest_match()
+
+    try:
+        match.users_for_text_translation.get(chat_id=chat_id)
+        is_text_translation_active = True
+    except models.TgUser.DoesNotExist:
+        is_text_translation_active = False
+
+    bot.send_message(chat_id=chat_id, text=core.Match.get_match_info(match),
+                     reply_markup=keyboards.get_inline_match_keyboard(
+                         match.id,
+                         is_text_translation_active=is_text_translation_active))
 
 
 @bot.message_handler(regexp='^Матчи в этом месяце$')
@@ -135,6 +152,3 @@ def disable_text_translation(message):
                                                                                    is_text_translation_active=False,
                                                                                    is_notification_active=data[
                                                                                        'notif']))
-
-
-

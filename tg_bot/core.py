@@ -242,4 +242,10 @@ class Match:
         try:
             return information_manager_models.Event.objects.get(id=self.match_id)
         except information_manager_models.Event.DoesNotExist:
-            return None
+            return information_manager_models.Event.objects.none()
+
+    @staticmethod
+    def get_nearest_match() -> information_manager_models.Event:
+        now = datetime.datetime.now()
+        matches = information_manager_models.Event.objects.filter(date_of_the_event__gte=now, type_of_event='match')
+        return matches[0]
