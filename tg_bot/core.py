@@ -47,9 +47,10 @@ class Bot(telebot.TeleBot):
             except Exception as e:
                 continue
 
-    def send_news(self, news: information_manager_models.News):
+    def send_news(self, news: information_manager_models.News, photo: bytes = None):
         """
         Отправка новости пользователям, у которых включено получение новостей.
+        :param photo:
         :param news:
         :return:
         """
@@ -63,7 +64,11 @@ class Bot(telebot.TeleBot):
 
         for user in users:
             try:
-                msg = self.send_message(chat_id=user.chat_id, text=title + text)
+                if photo:
+                    msg = self.send_photo(chat_id=user.chat_id, photo=photo, caption=title + text)
+                else:
+                    msg = self.send_message(chat_id=user.chat_id, text=title + text)
+
                 information_manager_models.SentNews.objects.create(news=news, user=user, message_id=msg.message_id)
             except Exception as e:
                 print(e)

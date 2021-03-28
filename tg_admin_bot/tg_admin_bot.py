@@ -183,10 +183,17 @@ def write_news(message):
         write_news_cancel(message)
         return
 
+    photo = None
+    if message.content_type == 'photo':
+        file_id = message.photo[-1].file_id
+        file_info = bot.get_file(file_id)
+        photo = bot.download_file(file_info.file_path)
+        text = message.caption
+
     news = core.TgNews(text=text, author=user)
     if news.object:
         bot.send_message(chat_id=chat_id, text='Отправка...')
-        news.send_news()
+        news.send_news(photo=photo)
         bot.send_message(chat_id=chat_id, text='Новость успшно отправлена',
                          reply_markup=keyboards.get_main_menu_keyboard())
     else:
@@ -244,7 +251,8 @@ def delete_last_news_confirm(message):
     bot.send_message(chat_id=chat_id, text='Новость удалена', reply_markup=keyboards.get_main_menu_keyboard())
 
 
-@bot.message_handler()
+@bot.message_handler(
+    content_types=['audio', 'photo', 'voice', 'video', 'document', 'text', 'location', 'contact', 'sticker'])
 def invalid_message(message):
     """
     Ответ на текст, который бот не понимает.

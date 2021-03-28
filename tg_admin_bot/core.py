@@ -135,9 +135,9 @@ class TgNews:
             return information_manager_models.News.objects.create(news=self.text, created_via_telegram=True,
                                                                   telegram_author=self.author.object)
 
-    def send_news(self):
+    def send_news(self, photo):
         if self.object:
-            tg_user_bot.send_news(news=self.object)
+            tg_user_bot.send_news(news=self.object, photo=photo)
         else:
             ValueError('Объект новости не создан')
 
