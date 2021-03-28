@@ -67,7 +67,12 @@ class Bot(telebot.TeleBot):
                 continue
 
     def start_reminders(self):
-
+        """
+        Запуск сервиса напоминаний
+        !Запускать в отдельном потоке!
+        :return:
+        """
+        print('Напоминания запущены...')
         minutes_old = None
         while True:
             now = datetime.datetime.now()
@@ -102,9 +107,6 @@ class Bot(telebot.TeleBot):
                     date_of_the_event__date=date_matches_in_an_hour,
                     date_of_the_event__hour=hours_matches_in_an_hour,
                     date_of_the_event__minute=minutes_matches_in_an_hour)
-
-                print('Через день', matches_every_other_day)
-                print('Через час', matches_in_an_hour)
 
                 # запускаем потоки с отправкой уведомлений
                 if matches_every_other_day:
