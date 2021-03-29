@@ -28,6 +28,10 @@ class Bot(telebot.TeleBot):
 
         return message
 
+    def send_invalid_message_answer(self, chat_id):
+        text = 'Я Вас не понимаю. Воспользуйтесь клавиатурой'
+        self.send_message(chat_id=chat_id, text=text, reply_markup=keyboards.get_main_menu_keyboard())
+
     def send_message_to_all_users(self, text):
         pass
 

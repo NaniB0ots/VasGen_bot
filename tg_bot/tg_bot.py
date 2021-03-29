@@ -152,3 +152,18 @@ def disable_text_translation(message):
                                                                                    is_text_translation_active=False,
                                                                                    is_notification_active=data[
                                                                                        'notif']))
+
+
+
+@bot.message_handler(
+    content_types=['audio', 'photo', 'voice', 'video', 'document', 'text', 'location', 'contact', 'sticker'])
+def invalid_message(message):
+    """
+    Ответ на текст, который бот не понимает.
+
+    Функция должна быть последней по порядку!
+    :return:
+    """
+    chat_id = message.chat.id
+
+    bot.send_invalid_message_answer(chat_id=chat_id)
