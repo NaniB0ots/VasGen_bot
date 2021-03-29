@@ -129,7 +129,7 @@ class Event(models.Model):
     date_of_the_event = models.DateTimeField(blank=True, verbose_name='Дата мероприятия')
     type_of_event = models.CharField(choices=[('match', 'матч')], max_length=150, verbose_name='Тип мероприятия',
                                      blank=True)
-    description = models.CharField(max_length=200, verbose_name='Описание')
+    description = models.TextField(verbose_name='Описание')
     photo = models.FileField(verbose_name='Фото', upload_to='events/%Y/%m/%d/', blank=True)
     teams = models.ManyToManyField(Team, blank=True, verbose_name='Команды')
 
