@@ -241,9 +241,10 @@ class Match:
         month_index = now.month
         month = month_list[month_index - 1]
 
-        matches = information_manager_models.Event.objects.filter(type_of_event='match',
-                                                                  date_of_the_event__month=month_index,
-                                                                  date_of_the_event__gte=now)
+        matches = information_manager_models.Event.objects.filter(
+            type_of_event='match',
+            date_of_the_event__month=month_index,
+            date_of_the_event__gte=now - datetime.timedelta(hours=2))
         return month, matches
 
     def get_queryset(self) -> information_manager_models.Event:
