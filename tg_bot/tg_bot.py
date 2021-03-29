@@ -37,6 +37,10 @@ def matches(message):
 
     match = core.Match.get_nearest_match()
 
+    if not match:
+        bot.send_message(chat_id=chat_id, text='Ближайших матчей не предвидится')
+        return
+
     try:
         match.users_for_text_translation.get(chat_id=chat_id)
         is_text_translation_active = True
