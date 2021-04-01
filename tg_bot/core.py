@@ -205,6 +205,33 @@ class BettingOnGames:
         pass
 
 
+class Coaches:
+    def __init__(self, post):
+        self.post = post
+        self.object = self.get_queryset()
+
+    @staticmethod
+    def get_main_coach():
+        main_coach = information_manager_models.CoachingStaff.objects.get(post='Главный тренер')
+        return main_coach
+
+    @staticmethod
+    def get_main_coach_info(main_coach_query) -> str:
+        text = f'{main_coach_query.lastname} {main_coach_query.firstname} {main_coach_query.patronymic}\n' \
+               f'Родился {main_coach_query.birthdate.strftime("%d.%m.%Y")}\n' \
+               f'--------------------------------------\n' \
+               f'Краткая информация:\n{main_coach_query.brief_information}\n' \
+               f'--------------------------------------\n' \
+               f'Карьера:\n{main_coach_query.progress}\n'
+        return text
+
+    def get_queryset(self) -> information_manager_models.CoachingStaff:
+        try:
+            return information_manager_models.CoachingStaff.objects.get(post=self.post)
+        except information_manager_models.CoachingStaff.DoesNotExists:
+            return information_manager_models.CoachingStaff.objects.none()
+
+
 class Match:
     def __init__(self, match_id):
         self.match_id = match_id

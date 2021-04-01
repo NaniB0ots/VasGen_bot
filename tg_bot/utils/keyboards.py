@@ -77,3 +77,60 @@ def get_inline_match_keyboard(event_id: int,
 
     markup.add(types.InlineKeyboardButton(text=translation_text, callback_data=translation_callback_data))
     return markup
+
+
+def get_about_team_keyboard():
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    btn1 = types.KeyboardButton('Тренерский состав')
+    btn2 = types.KeyboardButton('Игроки')
+    btn3 = types.KeyboardButton('История команды')
+    btn4 = types.KeyboardButton('Главное меню')
+
+    markup.add(btn1, btn2)
+    markup.add(btn3)
+    markup.add(btn4)
+    return markup
+
+
+def get_coaches_keyboard():
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    btn1 = types.KeyboardButton('Главный тренер')
+    btn2 = types.KeyboardButton('Второй тренер')
+    btn3 = types.KeyboardButton('В раздел "О команде"')
+    btn4 = types.KeyboardButton('Главное меню')
+
+    markup.add(btn1, btn2)
+    markup.add(btn3, btn4)
+    return markup
+
+
+def get_main_coach_keyboard():
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    btn1 = types.KeyboardButton('В раздел "Тренерский состав"')
+    btn2 = types.KeyboardButton('Главное меню')
+
+    markup.add(btn1, btn2)
+    return markup
+
+
+def get_players_keyboard():
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    btn1 = types.KeyboardButton('Нападающие')
+    btn2 = types.KeyboardButton('Защитники')
+    btn3 = types.KeyboardButton('Полузащитники')
+    btn4 = types.KeyboardButton('Вратари')
+    btn5 = types.KeyboardButton('В раздел "О команде"')
+    btn6 = types.KeyboardButton('Главное меню')
+
+    markup.add(btn1, btn2)
+    markup.add(btn3, btn4)
+    markup.add(btn5, btn6)
+    return markup
+
+def get_team_lore():
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    btn1 = types.KeyboardButton('В раздел "О команде"')
+    btn2 = types.KeyboardButton('Главное меню')
+
+    markup.add(btn1, btn2)
+    return markup

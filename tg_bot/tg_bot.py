@@ -25,6 +25,8 @@ def matches(message):
     bot.send_message(chat_id=chat_id, text='Главное меню', reply_markup=keyboards.get_main_menu_keyboard())
 
 
+# Раздел "Матчи"
+
 @bot.message_handler(regexp='^Матчи$')
 def matches(message):
     chat_id = message.chat.id
@@ -157,6 +159,46 @@ def disable_text_translation(message):
                                                                                    is_notification_active=data[
                                                                                        'notif']))
 
+
+
+# Раздел "О команде"
+
+@bot.message_handler(regexp='^О Команде$|^В раздел "О команде"$')
+def about_team(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text=f'О команде', reply_markup=keyboards.get_about_team_keyboard())
+
+
+@bot.message_handler(regexp='^Тренерский состав$|^В раздел "Тренерский состав"$')
+def get_trainers(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text=f'Тренера', reply_markup=keyboards.get_coaches_keyboard())
+
+
+@bot.message_handler(regexp='^Главный тренер$')
+def get_main_trainer(message):
+    chat_id = message.chat.id
+    post = 'Главный тренер'
+    main_coach = core.Coaches.get_main_coach()
+    main_coach_info = core.Coaches.get_main_coach_info(main_coach)
+    print(main_coach_info)
+    bot.send_message(chat_id=chat_id, text=f'Главный тренер\n'
+                                           f'{main_coach}')
+
+    bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
+
+
+@bot.message_handler(regexp='^Игроки$')
+def get_players(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text=f'Игроки', reply_markup=keyboards.get_players_keyboard())
+
+
+@bot.message_handler(regexp='^История команды')
+def get_players(message):
+    chat_id = message.chat.id
+    team_lore = 'Краткая история команды'
+    bot.send_message(chat_id=chat_id, text=team_lore, reply_markup=keyboards.get_team_lore())
 
 
 @bot.message_handler(
