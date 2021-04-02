@@ -181,7 +181,6 @@ def get_main_trainer(message):
     post = 'Главный тренер'
     coach = core.Coaches.get_coach(post)
     main_coach_info = core.Coaches.get_coach_info(coach)
-    print(main_coach_info)
     bot.send_message(chat_id=chat_id, text=f'Главный тренер')
 
     bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
@@ -193,7 +192,6 @@ def get_main_trainer(message):
     post = 'Второй тренер'
     coach = core.Coaches.get_coach(post)
     main_coach_info = core.Coaches.get_coach_info(coach)
-    print(main_coach_info)
     bot.send_message(chat_id=chat_id, text=f'Второй тренер')
 
     bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
