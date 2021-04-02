@@ -212,8 +212,40 @@ class Coaches:
 
     @staticmethod
     def get_coach(post):
-        main_coach = information_manager_models.CoachingStaff.objects.get(post=post)
-        return main_coach
+        try:
+            return information_manager_models.CoachingStaff.objects.get(post=post)
+        except information_manager_models.CoachingStaff.DoesNotExists:
+            return information_manager_models.CoachingStaff.objects.none()
+
+    @staticmethod
+    def get_coach_info(coach_query) -> str:
+        text = f'{coach_query.lastname} {coach_query.firstname} {coach_query.patronymic}\n' \
+               f'Родился {coach_query.birthdate.strftime("%d.%m.%Y")}\n' \
+               f'--------------------------------------\n' \
+               f'Краткая информация:\n{coach_query.brief_information}\n' \
+               f'--------------------------------------\n' \
+               f'Карьера:\n{coach_query.progress}\n'
+        return text
+
+    def get_queryset(self) -> information_manager_models.CoachingStaff:
+        try:
+            return information_manager_models.CoachingStaff.objects.get(post=self.post)
+        except Exception as e:
+            return information_manager_models.CoachingStaff.objects.none()
+
+
+class Players:
+    def __init__(self, playing_position):
+        self.playing_position = playing_position
+        self.object = self.get_queryset()
+
+    @staticmethod
+    def get_players(playing_position):
+        try:
+            return information_manager_models.Player.objects.get(playing_position=playing_position)
+        except Exception as e: #information_manager_models.Player.DoesNotExists не работает?! Выдает: ERROR - TeleBot: "Infinity polling exception: type object 'Player' has no attribute 'DoesNotExists'"
+
+            return information_manager_models.Player.objects.none()
 
     @staticmethod
     def get_coach_info(coach_query) -> str:

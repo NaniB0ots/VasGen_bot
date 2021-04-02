@@ -197,10 +197,19 @@ def get_main_trainer(message):
     bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
 
 
-@bot.message_handler(regexp='^Игроки$')
+@bot.message_handler(regexp='^Игроки$|^В раздел "Игроки"$')
 def get_players(message):
     chat_id = message.chat.id
     bot.send_message(chat_id=chat_id, text=f'Игроки', reply_markup=keyboards.get_players_keyboard())
+
+
+@bot.message_handler(regexp='^Полузащитники')
+def get_players(message):
+    chat_id = message.chat.id
+    playing_position = 'Полузащитник'
+    players = core.Players.get_players(playing_position)
+    print(players)
+    bot.send_message(chat_id=chat_id, text=f'Полузащитники', reply_markup=keyboards.get_halfbacks_keyboard(players))
 
 
 @bot.message_handler(regexp='^История команды')

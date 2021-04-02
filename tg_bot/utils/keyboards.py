@@ -127,6 +127,21 @@ def get_players_keyboard():
     markup.add(btn5, btn6)
     return markup
 
+
+def get_halfbacks_keyboard(players):
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
+    for player in players:
+        lastname = player.lastname
+        firstname = player.firstname
+        patronymic = player.patronymic
+        btn = types.KeyboardButton(f'{lastname} {firstname} {patronymic}')
+        markup.add(btn)
+
+    btn1 = types.KeyboardButton(f'В раздел "Игроки"')
+    btn2 = types.KeyboardButton(f'Главное меню')
+    markup.add(btn1, btn2)
+    return markup
+
 def get_team_lore():
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=False, resize_keyboard=True)
     btn1 = types.KeyboardButton('В раздел "О команде"')
