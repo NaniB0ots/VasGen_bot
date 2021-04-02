@@ -179,11 +179,22 @@ def get_trainers(message):
 def get_main_trainer(message):
     chat_id = message.chat.id
     post = 'Главный тренер'
-    main_coach = core.Coaches.get_main_coach()
-    main_coach_info = core.Coaches.get_main_coach_info(main_coach)
+    coach = core.Coaches.get_coach(post)
+    main_coach_info = core.Coaches.get_coach_info(coach)
     print(main_coach_info)
-    bot.send_message(chat_id=chat_id, text=f'Главный тренер\n'
-                                           f'{main_coach}')
+    bot.send_message(chat_id=chat_id, text=f'Главный тренер')
+
+    bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
+
+
+@bot.message_handler(regexp='^Второй тренер$')
+def get_main_trainer(message):
+    chat_id = message.chat.id
+    post = 'Второй тренер'
+    coach = core.Coaches.get_coach(post)
+    main_coach_info = core.Coaches.get_coach_info(coach)
+    print(main_coach_info)
+    bot.send_message(chat_id=chat_id, text=f'Второй тренер')
 
     bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
 
