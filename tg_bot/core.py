@@ -259,7 +259,7 @@ class Players:
         text = f'{player_query.lastname} {player_query.firstname} {player_query.patronymic}\n' \
                f'Родился {player_query.birthdate.strftime("%d.%m.%Y")}\n' \
                f'Игровая позиция: {player_query.playing_position}\n'\
-               f'{"Является капитаном команды!" if player_query.is_captain == True else ""}'\
+               f'{"Является капитаном команды!" if player_query.is_captain else ""}\n'\
                f'--------------------------------------\n' \
                f'Краткая информация:\n{player_query.brief_information}\n' \
                f'--------------------------------------\n' \
