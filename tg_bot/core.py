@@ -214,7 +214,7 @@ class Coaches:
     def get_coach(post):
         try:
             return information_manager_models.CoachingStaff.objects.get(post=post)
-        except information_manager_models.CoachingStaff.DoesNotExists:
+        except information_manager_models.CoachingStaff.DoesNotExist:
             return information_manager_models.CoachingStaff.objects.none()
 
     @staticmethod
@@ -244,14 +244,14 @@ class Players:
         try:
             player_query = information_manager_models.Player.objects.filter(playing_position=playing_position)
             return player_query
-        except information_manager_models.Player.DoesNotExists: #не работает?! Выдает: ERROR - TeleBot: "Infinity polling exception: type object 'Player' has no attribute 'DoesNotExists'"            print('Ошибкка')
+        except information_manager_models.Player.DoesNotExist:
             return information_manager_models.Player.objects.none()
 
     @staticmethod
     def get_player(full_name):
         try:
             return information_manager_models.Player.objects.get(lastname=full_name.split()[0], firstname=full_name.split()[1])
-        except information_manager_models.Player.DoesNotExists:
+        except information_manager_models.Player.DoesNotExist:
             return information_manager_models.Player.objects.none()
 
     @staticmethod
@@ -269,7 +269,7 @@ class Players:
     def get_queryset(self) -> information_manager_models.CoachingStaff:
         try:
             return information_manager_models.CoachingStaff.objects.get(post=self.post)
-        except information_manager_models.CoachingStaff.DoesNotExists:
+        except information_manager_models.CoachingStaff.DoesNotExist:
             return information_manager_models.CoachingStaff.objects.none()
 
 

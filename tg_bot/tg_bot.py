@@ -4,6 +4,7 @@ from project.settings import TG_TOKEN
 from tg_bot import core, models
 from tg_bot.core import Bot
 from tg_bot.utils import keyboards
+import re
 
 if not TG_TOKEN:
     raise ValueError('TG_TOKEN не может быть пустым')
@@ -180,7 +181,7 @@ def get_main_trainer(message):
     post = message.text
     coach = core.Coaches.get_coach(post)
     main_coach_info = core.Coaches.get_coach_info(coach)
-    bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
+    bot.send_message(chat_id=chat_id, text=main_coach_info)
 
 
 @bot.message_handler(regexp='^Игроки$|^В раздел "Игроки"$')
@@ -199,13 +200,17 @@ def get_players(message):
     bot.send_message(chat_id=chat_id, text=f'{message.text}', reply_markup=keyboards.get_halfbacks_keyboard(players))
 
 
-@bot.message_handler(regexp=r'([А-ЯЁ][а-яё]+[\-\s]?){3,}')
+@bot.message_handler(regexp=r'(?:[А-ЯЁ][а-яё]+\s?){3}')
 def get_players(message):
+    pattern = re.compile(r'(?:[А-ЯЁ][а-яё]+\s?){3}')
     chat_id = message.chat.id
     full_name = message.text
-    player = core.Players.get_player(full_name)
-    player_info = core.Players.get_player_info(player)
-    bot.send_message(chat_id=chat_id, text=player_info)
+    if re.fullmatch(pattern, full_name):
+        player = core.Players.get_player(full_name)
+        player_info = core.Players.get_player_info(player)
+        bot.send_message(chat_id=chat_id, text=player_info)
+    else:
+        bot.send_invalid_message_answer(chat_id=chat_id)
 
 
 @bot.message_handler(regexp='^История команды')
