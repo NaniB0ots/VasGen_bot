@@ -160,7 +160,6 @@ def disable_text_translation(message):
                                                                                        'notif']))
 
 
-
 # Раздел "О команде"
 
 @bot.message_handler(regexp='^О Команде$|^В раздел "О команде"$')
@@ -175,25 +174,12 @@ def get_trainers(message):
     bot.send_message(chat_id=chat_id, text=f'Тренера', reply_markup=keyboards.get_coaches_keyboard())
 
 
-@bot.message_handler(regexp='^Главный тренер$')
+@bot.message_handler(regexp='^Главный тренер$|^Второй тренер$')
 def get_main_trainer(message):
     chat_id = message.chat.id
-    post = 'Главный тренер'
+    post = message.text
     coach = core.Coaches.get_coach(post)
     main_coach_info = core.Coaches.get_coach_info(coach)
-    bot.send_message(chat_id=chat_id, text=f'Главный тренер')
-
-    bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
-
-
-@bot.message_handler(regexp='^Второй тренер$')
-def get_main_trainer(message):
-    chat_id = message.chat.id
-    post = 'Второй тренер'
-    coach = core.Coaches.get_coach(post)
-    main_coach_info = core.Coaches.get_coach_info(coach)
-    bot.send_message(chat_id=chat_id, text=f'Второй тренер')
-
     bot.send_message(chat_id=chat_id, text=main_coach_info, reply_markup=keyboards.get_main_coach_keyboard())
 
 
@@ -203,13 +189,23 @@ def get_players(message):
     bot.send_message(chat_id=chat_id, text=f'Игроки', reply_markup=keyboards.get_players_keyboard())
 
 
-@bot.message_handler(regexp='^Полузащитники')
+@bot.message_handler(regexp='^Нападающие|^Защитники$|^Полузащитники$|^Вратари$')
+def get_players(message):
+    playing_positions = {'Нападающие': 'Нападающий', 'Защитники': 'Защитник', 'Полузащитники': 'Полузащитник',
+                         'Вратари': 'Вратарь'}
+    chat_id = message.chat.id
+    playing_position = playing_positions[message.text]
+    players = core.Players.get_players(playing_position)
+    bot.send_message(chat_id=chat_id, text=f'{message.text}', reply_markup=keyboards.get_halfbacks_keyboard(players))
+
+
+@bot.message_handler(regexp=r'([А-ЯЁ][а-яё]+[\-\s]?){3,}')
 def get_players(message):
     chat_id = message.chat.id
-    playing_position = 'Полузащитник'
-    players = core.Players.get_players(playing_position)
-    print(players)
-    bot.send_message(chat_id=chat_id, text=f'Полузащитники', reply_markup=keyboards.get_halfbacks_keyboard(players))
+    full_name = message.text
+    player = core.Players.get_player(full_name)
+    player_info = core.Players.get_player_info(player)
+    bot.send_message(chat_id=chat_id, text=player_info)
 
 
 @bot.message_handler(regexp='^История команды')

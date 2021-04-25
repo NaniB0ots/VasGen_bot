@@ -242,19 +242,28 @@ class Players:
     @staticmethod
     def get_players(playing_position):
         try:
-            return information_manager_models.Player.objects.get(playing_position=playing_position)
-        except Exception as e: #information_manager_models.Player.DoesNotExists не работает?! Выдает: ERROR - TeleBot: "Infinity polling exception: type object 'Player' has no attribute 'DoesNotExists'"
-
+            player_query = information_manager_models.Player.objects.filter(playing_position=playing_position)
+            return player_query
+        except information_manager_models.Player.DoesNotExists: #не работает?! Выдает: ERROR - TeleBot: "Infinity polling exception: type object 'Player' has no attribute 'DoesNotExists'"            print('Ошибкка')
             return information_manager_models.Player.objects.none()
 
     @staticmethod
-    def get_coach_info(coach_query) -> str:
-        text = f'{coach_query.lastname} {coach_query.firstname} {coach_query.patronymic}\n' \
-               f'Родился {coach_query.birthdate.strftime("%d.%m.%Y")}\n' \
+    def get_player(full_name):
+        try:
+            return information_manager_models.Player.objects.get(lastname=full_name.split()[0], firstname=full_name.split()[1])
+        except information_manager_models.Player.DoesNotExists:
+            return information_manager_models.Player.objects.none()
+
+    @staticmethod
+    def get_player_info(player_query) -> str:
+        text = f'{player_query.lastname} {player_query.firstname} {player_query.patronymic}\n' \
+               f'Родился {player_query.birthdate.strftime("%d.%m.%Y")}\n' \
+               f'Игровая позиция: {player_query.playing_position}\n'\
+               f'{"Является капитаном команды!" if player_query.is_captain == True else ""}'\
                f'--------------------------------------\n' \
-               f'Краткая информация:\n{coach_query.brief_information}\n' \
+               f'Краткая информация:\n{player_query.brief_information}\n' \
                f'--------------------------------------\n' \
-               f'Карьера:\n{coach_query.progress}\n'
+               f'Карьера:\n{player_query.progress}\n'
         return text
 
     def get_queryset(self) -> information_manager_models.CoachingStaff:
