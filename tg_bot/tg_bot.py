@@ -79,6 +79,13 @@ def matches(message):
                          ))
 
 
+@bot.message_handler(regexp='^Турнирная таблица$')
+def lore(message):
+    chat_id = message.chat.id
+    team_lore = '<Турнирная таблица>'
+    bot.send_message(chat_id=chat_id, text=team_lore)
+
+
 @bot.callback_query_handler(func=lambda message: 'enable_match_notif' in message.data)
 def enable_match_notifications(message):
     """
@@ -200,8 +207,40 @@ def get_players(message):
     bot.send_message(chat_id=chat_id, text=f'{message.text}', reply_markup=keyboards.get_halfbacks_keyboard(players))
 
 
+@bot.message_handler(regexp='^История команды$')
+def lore(message):
+    chat_id = message.chat.id
+    team_lore = '<Краткая история команды>'
+    bot.send_message(chat_id=chat_id, text=team_lore)
+
+
+@bot.message_handler(regexp='^Мини-игры$')
+def lore(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text='<Мини-игры>')
+
+
+@bot.message_handler(regexp=r'^Настройки')
+def extra(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text='<Настройки>')
+
+
+@bot.message_handler(regexp=r'^Другое$')
+def extra(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id=chat_id, text='Другое', reply_markup=keyboards.extra_keyboard())
+
+
+@bot.message_handler(regexp='^Авторы$')
+def authors(message):
+    chat_id = message.chat.id
+
+    bot.send_message(chat_id=chat_id, text=bot.get_authors())
+
+
 @bot.message_handler(regexp=r'(?:[А-ЯЁ][а-яё]+\s?){3}')
-def get_players(message):
+def players_info(message):
     pattern = re.compile(r'(?:[А-ЯЁ][а-яё]+\s?){3}')
     chat_id = message.chat.id
     full_name = message.text
@@ -211,13 +250,6 @@ def get_players(message):
         bot.send_message(chat_id=chat_id, text=player_info)
     else:
         bot.send_invalid_message_answer(chat_id=chat_id)
-
-
-@bot.message_handler(regexp='^История команды')
-def get_players(message):
-    chat_id = message.chat.id
-    team_lore = 'Краткая история команды'
-    bot.send_message(chat_id=chat_id, text=team_lore, reply_markup=keyboards.get_team_lore())
 
 
 @bot.message_handler(

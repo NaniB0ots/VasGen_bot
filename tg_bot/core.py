@@ -13,12 +13,12 @@ from threading import Thread
 class Bot(telebot.TeleBot):
     @staticmethod
     def get_start_message() -> str:
-        message = 'Добрейшего времени суток!\n\n' \
-                  'Тебя приветствует хоккейный помощник Иркутского политеха.\n' \
+        message = 'Добрейшего времени суток!🤗\n\n' \
+                  '✋Тебя приветствует хоккейный помощник Иркутского политеха.🤚\n' \
                   'Я расскажу тебе все о команде Иркутского политеха по хоккею с мячом, ' \
                   'подскажу раписание ближайших игр, а время игры буду вести текстовую трансляцию,' \
                   'еще с моей помощью можно приобрести билеты на матч и многое другое.\n\n' \
-                  'Добро пожаловать!'
+                  'Добро пожаловать!✨'
 
         return message
 
@@ -31,6 +31,15 @@ class Bot(telebot.TeleBot):
     def send_invalid_message_answer(self, chat_id):
         text = 'Я Вас не понимаю. Воспользуйтесь клавиатурой'
         self.send_message(chat_id=chat_id, text=text, reply_markup=keyboards.get_main_menu_keyboard())
+
+    @staticmethod
+    def get_authors() -> str:
+        text = 'Авторы проекта ВасГен бот:\n' \
+               'Сидоренко Анжелика - @alikastory\n' \
+               'Лесков Алексей - @bolanebyla\n' \
+               'Ашимов Султан - @ace_sultan\n'
+
+        return text
 
     def send_message_to_all_users(self, text):
         pass
@@ -61,7 +70,7 @@ class Bot(telebot.TeleBot):
         """
         users = models.TgUser.objects.filter(news_subscription=True)
 
-        title = 'Новости\n'
+        title = 'Новости🛎\n'
         title += f'{news.title}\n' if news.title else ''
         title += '----------------------------------\n'
 
@@ -219,12 +228,12 @@ class Coaches:
 
     @staticmethod
     def get_coach_info(coach_query) -> str:
-        text = f'{coach_query.lastname} {coach_query.firstname} {coach_query.patronymic}\n' \
+        text = f'👉{coach_query.lastname} {coach_query.firstname} {coach_query.patronymic}\n' \
                f'Родился {coach_query.birthdate.strftime("%d.%m.%Y")}\n' \
                f'--------------------------------------\n' \
-               f'Краткая информация:\n{coach_query.brief_information}\n' \
+               f'📃Краткая информация:\n{coach_query.brief_information}\n' \
                f'--------------------------------------\n' \
-               f'Карьера:\n{coach_query.progress}\n'
+               f'🏆Карьера:\n{coach_query.progress}\n'
         return text
 
     def get_queryset(self) -> information_manager_models.CoachingStaff:
@@ -250,20 +259,22 @@ class Players:
     @staticmethod
     def get_player(full_name):
         try:
-            return information_manager_models.Player.objects.get(lastname=full_name.split()[0], firstname=full_name.split()[1])
+            return information_manager_models.Player.objects.get(lastname=full_name.split()[0],
+                                                                 firstname=full_name.split()[1])
         except information_manager_models.Player.DoesNotExist:
             return information_manager_models.Player.objects.none()
 
     @staticmethod
     def get_player_info(player_query) -> str:
-        text = f'{player_query.lastname} {player_query.firstname} {player_query.patronymic}\n' \
+        cap = "Является капитаном команды!\n"
+        text = f'👉{player_query.lastname} {player_query.firstname} {player_query.patronymic}\n' \
                f'Родился {player_query.birthdate.strftime("%d.%m.%Y")}\n' \
-               f'Игровая позиция: {player_query.playing_position}\n'\
-               f'{"Является капитаном команды!" if player_query.is_captain else ""}\n'\
+               f'Игровая позиция: {player_query.playing_position}\n' \
+               f'{cap if player_query.is_captain else ""}' \
                f'--------------------------------------\n' \
-               f'Краткая информация:\n{player_query.brief_information}\n' \
+               f'📃Краткая информация:\n{player_query.brief_information}\n' \
                f'--------------------------------------\n' \
-               f'Карьера:\n{player_query.progress}\n'
+               f'🏆Карьера:\n{player_query.progress}\n'
         return text
 
     def get_queryset(self) -> information_manager_models.CoachingStaff:
